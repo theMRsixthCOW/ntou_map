@@ -1,0 +1,71 @@
+﻿Number,Name,name_ch,Location Code,code_ID
+1,Administration Building,行政大樓,F3,ADM
+2,Exhibition Hall · Ocean Hall,展覽廳·海洋廳,F3,ODB
+3,Library (1F Convenience Store),圖書館（1樓便利商店）,G3,LIB
+4,General Research Center (1F Stained Glass House),綜合研究中心（1樓彩繪玻璃屋）,G4,GRC
+5,General Purpose Building 2,綜合大樓2,G4,GH2
+6,NTOU Hung Kuang Bookstore,海大宏光書店,G3,
+7,Post Office,郵局,F4,
+8,Mechanical and Mechatronic Engineering Building B · Office of Library and Information Technology,機械與機電工程大樓B·圖書與資訊科技中心,F3,MEB
+9,Mechanical and Mechatronic Engineering Building A,機械與機電工程大樓A,E3,MEA
+10,Recreation Building,休閒大樓,E2,STA
+11,Dept. of Merchant Marine,航運管理學系,E3,STM
+12,Yen-Ping Technology Building,彥平科技大樓,E2,TEC
+13,Marine Engineering Factory,海洋工程廠,E3,HRE
+14,Ivy Wang Hall,王懿德紀念館,E3,IVY
+15,Dept. of Shipping and Transportation Management,航運管理學系,D2,STM
+16,Brave Fountain,勇者噴泉,D2,
+17,Hai-Kong Building,海空大樓,D2,SAH
+18,Sports Center,體育中心,D2,
+19,Dormitory 4,四號宿舍,D1,
+20,2nd Restaurant,二餐廳,D1,
+21,Dormitory 3,三號宿舍,D1,
+22,Student Activity Center,學生活動中心,C3,SAC
+23,Gymnasium,體育館,D3,GYM
+24,Sports Field,運動場,D4,SPF
+25,Basketball Court,籃球場,E4,SPF
+26,NTOU Imagery Hall,海大影像館,F4,ODB
+27,Ocean Pier,海洋碼頭,F5,
+28,Dormitory 2,二號宿舍,G1,
+29,Archery Range,射箭場,F2,
+30,1st Restaurant,一餐廳,G2,FRB
+31,General Purpose Building 3,綜合大樓3,G2,GH3
+32,Lung-Gang Ecological Park,龍崗生態園區,G1,
+33,Fantasy Fountain,幻夢噴泉,G2,
+34,Humanities Building,人文大樓,G2,BOH
+35,Ocean and Mountain View Corridor,山海景觀廊道,G3,
+36,Dormitory 1,一號宿舍,H2,
+37,landscape park,景觀公園,H2,
+38,Marine Science Building B,海洋科學大樓B,G2,OCE
+39,Marine Science Building A,海洋科學大樓A,G3,OCE
+40,Founding Memorial Park,創校紀念公園,G2,
+41,Marine Science Building C,海洋科學大樓C,H2,OCE
+42,NTOU History Museum,海大校史館,H3,
+43,Institute of Marine Environment and Ecology,海洋環境與生態研究所,H2,
+44,Aquaculture Center,養殖中心,H3,
+45,General Purpose Building 1,綜合大樓1,H3,GH1
+46,Dept. of Marine Environmental Informatics,海洋環境資訊學系,H3,
+47,Institute of Food Safety and Risk Management Building,食品安全與風險管理研究所大樓,H3,FSB
+48,Volleyball Court · Tennis Court,排球場·網球場,H3,SPF
+49,Dept. of Environmental Biology and Fisheries Science,環境生物與漁業科學學系,I2,FSH
+50,College of Life Sciences,生命科學院,I3,CLS
+51,Food Engineering Building,食品工程大樓,H4,MFE
+52,Terrestrial Animal Experimental Center,陸生動物實驗中心,H4,AAC
+53,Dept. of Food Science,食品科學系,H4,MFS
+54,Mu Lan Ocean and Maritime Education Building,木蘭海洋與海事教育大樓,I5,MAF
+55,NTOU Rainwater Park,海大雨水公園,B2,
+56,Ocean Engineering Laboratory,海洋工程實驗室,B3,HRE
+57,Softball Field,壘球場,B4,SPF
+58,Harbor and River Engineering-Building 1,港灣及河川工程大樓1,B3,HR1
+59,Beach Volleyball Court,沙灘排球場,B4,SPF
+60,Dept. of Systems Engineering and Naval Architecture,系統工程暨造船工程學系,B3,NVA
+61,College of Engineering · 3rd Restaurant,工學院·三餐廳,C3,CE-
+62,Electrical Engineering Building 1,電機工程大樓1,C4,EE1
+63,Electrical Engineering Building 2,電機工程大樓2,C4,EE2
+64,Dept. of Computer Science and Engineering,電腦與通訊工程學系,C4,INS
+65,Aquatic Animal Center,水生動物中心,D4,AAC
+66,Cultivation Center for Aquatic Organisms,水生生物培育中心,C4,
+67,Acoustics Laboratory Center,聲學實驗中心,B4,UAH
+68,Electrical Engineering and Computer Science Building,電機與資訊工程大樓,C4,ECG
+69,Large Cavitation Tunnel Laboratory,大型空蝕隧道實驗室,A2,UAH
+70,Harbor and River Engineering Building 2,港灣及河川工程大樓2,A2,HR2

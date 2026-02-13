@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTOU Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.osmbuildings.org/4.1.1/OSMBuildings.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.osmbuildings.org/4.1.1/OSMBuildings.js"></script>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="tooltip"></div>
+    <script src="index.js"></script>
+    <div class="search-container">
+    <form id="search-form">                  <!--the input box-->  
+        <input type="text" id="fname" name="fname" placeholder="Search building..."><br><br>
+        <button type="submit" class="fas fa-search" id="search-btn"></button>
+        <div style="color: rgba(0, 0, 0, 0.5); font-size: 11px; margin-top: 8px; max-width: 380px;" id="search-output1">
+            <strong>Algorithm:</strong> Levenshtein Distance (Edit Distance) - Compares input with name_ch & code_id fields, returns top 2 matches with highest similarity scores
+        </div>
+        <div style="color: rgba(0, 0, 0, 0.5); font-size: 11px; margin-top: 4px;" id="search-output2">
+            <strong>Examples:</strong> Try "行政" → 行政大樓 | "Library" → 圖書館 | "ADM" → Administration Building
+            
+        </div>
+        <div id="search-results" class="search-results"></div>
+    </form>
+    </div>
+    
+     
+</body>
+</html>

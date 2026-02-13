@@ -1,0 +1,492 @@
+[
+  {
+    "number": "1",
+    "name": "Administration Building",
+    "name_ch": "行政大樓",
+    "location_code": "F3",
+    "code_id": "ADM"
+  },
+  {
+    "number": "2",
+    "name": "Exhibition Hall · Ocean Hall",
+    "name_ch": "展覽廳·海洋廳",
+    "location_code": "F3",
+    "code_id": "ODB"
+  },
+  {
+    "number": "3",
+    "name": "Library (1F Convenience Store)",
+    "name_ch": "圖書館（1樓便利商店）",
+    "location_code": "G3",
+    "code_id": "LIB"
+  },
+  {
+    "number": "4",
+    "name": "General Research Center (1F Stained Glass House)",
+    "name_ch": "綜合研究中心（1樓彩繪玻璃屋）",
+    "location_code": "G4",
+    "code_id": "GRC"
+  },
+  {
+    "number": "5",
+    "name": "General Purpose Building 2",
+    "name_ch": "綜合大樓2",
+    "location_code": "G4",
+    "code_id": "GH2"
+  },
+  {
+    "number": "6",
+    "name": "NTOU Hung Kuang Bookstore",
+    "name_ch": "海大宏光書店",
+    "location_code": "G3",
+    "code_id": ""
+  },
+  {
+    "number": "7",
+    "name": "Post Office",
+    "name_ch": "郵局",
+    "location_code": "F4",
+    "code_id": ""
+  },
+  {
+    "number": "8",
+    "name": "Mechanical and Mechatronic Engineering Building B · Office of Library and Information Technology",
+    "name_ch": "機械與機電工程大樓B·圖書與資訊科技中心",
+    "location_code": "F3",
+    "code_id": "MEB"
+  },
+  {
+    "number": "9",
+    "name": "Mechanical and Mechatronic Engineering Building A",
+    "name_ch": "機械與機電工程大樓A",
+    "location_code": "E3",
+    "code_id": "MEA"
+  },
+  {
+    "number": "10",
+    "name": "Recreation Building",
+    "name_ch": "休閒大樓",
+    "location_code": "E2",
+    "code_id": "STA"
+  },
+  {
+    "number": "11",
+    "name": "Dept. of Merchant Marine",
+    "name_ch": "航運管理學系",
+    "location_code": "E3",
+    "code_id": "STM"
+  },
+  {
+    "number": "12",
+    "name": "Yen-Ping Technology Building",
+    "name_ch": "彥平科技大樓",
+    "location_code": "E2",
+    "code_id": "TEC"
+  },
+  {
+    "number": "13",
+    "name": "Marine Engineering Factory",
+    "name_ch": "海洋工程廠",
+    "location_code": "E3",
+    "code_id": "HRE"
+  },
+  {
+    "number": "14",
+    "name": "Ivy Wang Hall",
+    "name_ch": "王懿德紀念館",
+    "location_code": "E3",
+    "code_id": "IVY"
+  },
+  {
+    "number": "15",
+    "name": "Dept. of Shipping and Transportation Management",
+    "name_ch": "航運管理學系",
+    "location_code": "D2",
+    "code_id": "STM"
+  },
+  {
+    "number": "16",
+    "name": "Brave Fountain",
+    "name_ch": "勇者噴泉",
+    "location_code": "D2",
+    "code_id": ""
+  },
+  {
+    "number": "17",
+    "name": "Hai-Kong Building",
+    "name_ch": "海空大樓",
+    "location_code": "D2",
+    "code_id": "SAH"
+  },
+  {
+    "number": "18",
+    "name": "Sports Center",
+    "name_ch": "體育中心",
+    "location_code": "D2",
+    "code_id": ""
+  },
+  {
+    "number": "19",
+    "name": "Dormitory 4",
+    "name_ch": "四號宿舍",
+    "location_code": "D1",
+    "code_id": ""
+  },
+  {
+    "number": "20",
+    "name": "2nd Restaurant",
+    "name_ch": "二餐廳",
+    "location_code": "D1",
+    "code_id": ""
+  },
+  {
+    "number": "21",
+    "name": "Dormitory 3",
+    "name_ch": "三號宿舍",
+    "location_code": "D1",
+    "code_id": ""
+  },
+  {
+    "number": "22",
+    "name": "Student Activity Center",
+    "name_ch": "學生活動中心",
+    "location_code": "C3",
+    "code_id": "SAC"
+  },
+  {
+    "number": "23",
+    "name": "Gymnasium",
+    "name_ch": "體育館",
+    "location_code": "D3",
+    "code_id": "GYM"
+  },
+  {
+    "number": "24",
+    "name": "Sports Field",
+    "name_ch": "運動場",
+    "location_code": "D4",
+    "code_id": "SPF"
+  },
+  {
+    "number": "25",
+    "name": "Basketball Court",
+    "name_ch": "籃球場",
+    "location_code": "E4",
+    "code_id": "SPF"
+  },
+  {
+    "number": "26",
+    "name": "NTOU Imagery Hall",
+    "name_ch": "海大影像館",
+    "location_code": "F4",
+    "code_id": "ODB"
+  },
+  {
+    "number": "27",
+    "name": "Ocean Pier",
+    "name_ch": "海洋碼頭",
+    "location_code": "F5",
+    "code_id": ""
+  },
+  {
+    "number": "28",
+    "name": "Dormitory 2",
+    "name_ch": "二號宿舍",
+    "location_code": "G1",
+    "code_id": ""
+  },
+  {
+    "number": "29",
+    "name": "Archery Range",
+    "name_ch": "射箭場",
+    "location_code": "F2",
+    "code_id": ""
+  },
+  {
+    "number": "30",
+    "name": "1st Restaurant",
+    "name_ch": "一餐廳",
+    "location_code": "G2",
+    "code_id": "FRB"
+  },
+  {
+    "number": "31",
+    "name": "General Purpose Building 3",
+    "name_ch": "綜合大樓3",
+    "location_code": "G2",
+    "code_id": "GH3"
+  },
+  {
+    "number": "32",
+    "name": "Lung-Gang Ecological Park",
+    "name_ch": "龍崗生態園區",
+    "location_code": "G1",
+    "code_id": ""
+  },
+  {
+    "number": "33",
+    "name": "Fantasy Fountain",
+    "name_ch": "幻夢噴泉",
+    "location_code": "G2",
+    "code_id": ""
+  },
+  {
+    "number": "34",
+    "name": "Humanities Building",
+    "name_ch": "人文大樓",
+    "location_code": "G2",
+    "code_id": "BOH"
+  },
+  {
+    "number": "35",
+    "name": "Ocean and Mountain View Corridor",
+    "name_ch": "山海景觀廊道",
+    "location_code": "G3",
+    "code_id": ""
+  },
+  {
+    "number": "36",
+    "name": "Dormitory 1",
+    "name_ch": "一號宿舍",
+    "location_code": "H2",
+    "code_id": ""
+  },
+  {
+    "number": "37",
+    "name": "landscape park",
+    "name_ch": "景觀公園",
+    "location_code": "H2",
+    "code_id": ""
+  },
+  {
+    "number": "38",
+    "name": "Marine Science Building B",
+    "name_ch": "海洋科學大樓B",
+    "location_code": "G2",
+    "code_id": "OCE"
+  },
+  {
+    "number": "39",
+    "name": "Marine Science Building A",
+    "name_ch": "海洋科學大樓A",
+    "location_code": "G3",
+    "code_id": "OCE"
+  },
+  {
+    "number": "40",
+    "name": "Founding Memorial Park",
+    "name_ch": "創校紀念公園",
+    "location_code": "G2",
+    "code_id": ""
+  },
+  {
+    "number": "41",
+    "name": "Marine Science Building C",
+    "name_ch": "海洋科學大樓C",
+    "location_code": "H2",
+    "code_id": "OCE"
+  },
+  {
+    "number": "42",
+    "name": "NTOU History Museum",
+    "name_ch": "海大校史館",
+    "location_code": "H3",
+    "code_id": ""
+  },
+  {
+    "number": "43",
+    "name": "Institute of Marine Environment and Ecology",
+    "name_ch": "海洋環境與生態研究所",
+    "location_code": "H2",
+    "code_id": ""
+  },
+  {
+    "number": "44",
+    "name": "Aquaculture Center",
+    "name_ch": "養殖中心",
+    "location_code": "H3",
+    "code_id": ""
+  },
+  {
+    "number": "45",
+    "name": "General Purpose Building 1",
+    "name_ch": "綜合大樓1",
+    "location_code": "H3",
+    "code_id": "GH1"
+  },
+  {
+    "number": "46",
+    "name": "Dept. of Marine Environmental Informatics",
+    "name_ch": "海洋環境資訊學系",
+    "location_code": "H3",
+    "code_id": ""
+  },
+  {
+    "number": "47",
+    "name": "Institute of Food Safety and Risk Management Building",
+    "name_ch": "食品安全與風險管理研究所大樓",
+    "location_code": "H3",
+    "code_id": "FSB"
+  },
+  {
+    "number": "48",
+    "name": "Volleyball Court · Tennis Court",
+    "name_ch": "排球場·網球場",
+    "location_code": "H3",
+    "code_id": "SPF"
+  },
+  {
+    "number": "49",
+    "name": "Dept. of Environmental Biology and Fisheries Science",
+    "name_ch": "環境生物與漁業科學學系",
+    "location_code": "I2",
+    "code_id": "FSH"
+  },
+  {
+    "number": "50",
+    "name": "College of Life Sciences",
+    "name_ch": "生命科學院",
+    "location_code": "I3",
+    "code_id": "CLS"
+  },
+  {
+    "number": "51",
+    "name": "Food Engineering Building",
+    "name_ch": "食品工程大樓",
+    "location_code": "H4",
+    "code_id": "MFE"
+  },
+  {
+    "number": "52",
+    "name": "Terrestrial Animal Experimental Center",
+    "name_ch": "陸生動物實驗中心",
+    "location_code": "H4",
+    "code_id": "AAC"
+  },
+  {
+    "number": "53",
+    "name": "Dept. of Food Science",
+    "name_ch": "食品科學系",
+    "location_code": "H4",
+    "code_id": "MFS"
+  },
+  {
+    "number": "54",
+    "name": "Mu Lan Ocean and Maritime Education Building",
+    "name_ch": "木蘭海洋與海事教育大樓",
+    "location_code": "I5",
+    "code_id": "MAF"
+  },
+  {
+    "number": "55",
+    "name": "NTOU Rainwater Park",
+    "name_ch": "海大雨水公園",
+    "location_code": "B2",
+    "code_id": ""
+  },
+  {
+    "number": "56",
+    "name": "Ocean Engineering Laboratory",
+    "name_ch": "海洋工程實驗室",
+    "location_code": "B3",
+    "code_id": "HRE"
+  },
+  {
+    "number": "57",
+    "name": "Softball Field",
+    "name_ch": "壘球場",
+    "location_code": "B4",
+    "code_id": "SPF"
+  },
+  {
+    "number": "58",
+    "name": "Harbor and River Engineering-Building 1",
+    "name_ch": "港灣及河川工程大樓1",
+    "location_code": "B3",
+    "code_id": "HR1"
+  },
+  {
+    "number": "59",
+    "name": "Beach Volleyball Court",
+    "name_ch": "沙灘排球場",
+    "location_code": "B4",
+    "code_id": "SPF"
+  },
+  {
+    "number": "60",
+    "name": "Dept. of Systems Engineering and Naval Architecture",
+    "name_ch": "系統工程暨造船工程學系",
+    "location_code": "B3",
+    "code_id": "NVA"
+  },
+  {
+    "number": "61",
+    "name": "College of Engineering · 3rd Restaurant",
+    "name_ch": "工學院·三餐廳",
+    "location_code": "C3",
+    "code_id": "CE-"
+  },
+  {
+    "number": "62",
+    "name": "Electrical Engineering Building 1",
+    "name_ch": "電機工程大樓1",
+    "location_code": "C4",
+    "code_id": "EE1"
+  },
+  {
+    "number": "63",
+    "name": "Electrical Engineering Building 2",
+    "name_ch": "電機工程大樓2",
+    "location_code": "C4",
+    "code_id": "EE2"
+  },
+  {
+    "number": "64",
+    "name": "Dept. of Computer Science and Engineering",
+    "name_ch": "電腦與通訊工程學系",
+    "location_code": "C4",
+    "code_id": "INS"
+  },
+  {
+    "number": "65",
+    "name": "Aquatic Animal Center",
+    "name_ch": "水生動物中心",
+    "location_code": "D4",
+    "code_id": "AAC"
+  },
+  {
+    "number": "66",
+    "name": "Cultivation Center for Aquatic Organisms",
+    "name_ch": "水生生物培育中心",
+    "location_code": "C4",
+    "code_id": ""
+  },
+  {
+    "number": "67",
+    "name": "Acoustics Laboratory Center",
+    "name_ch": "聲學實驗中心",
+    "location_code": "B4",
+    "code_id": "UAH"
+  },
+  {
+    "number": "68",
+    "name": "Electrical Engineering and Computer Science Building",
+    "name_ch": "電機與資訊工程大樓",
+    "location_code": "C4",
+    "code_id": "ECG"
+  },
+  {
+    "number": "69",
+    "name": "Large Cavitation Tunnel Laboratory",
+    "name_ch": "大型空蝕隧道實驗室",
+    "location_code": "A2",
+    "code_id": "UAH"
+  },
+  {
+    "number": "70",
+    "name": "Harbor and River Engineering Building 2",
+    "name_ch": "港灣及河川工程大樓2",
+    "location_code": "A2",
+    "code_id": "HR2"
+  }
+]
