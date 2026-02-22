@@ -1,32 +1,101 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading"></h1>
-		<p>This page comes from a static asset stored at `public/index.html` as configured in `wrangler.jsonc`.</p>
-		<button id="button" type="button">Fetch a random UUID</button>
-		<output id="random" for="button"></output>
-		<script>
-			fetch('/message')
-				.then((resp) => resp.text())
-				.then((text) => {
-					const h1 = document.getElementById('heading');
-					h1.textContent = text;
-				});
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTOU CAMPUS NAVIGATION SYSTEM</title>
 
-			const button = document.getElementById("button");
-			button.addEventListener("click", () => {
-				fetch('/random')
-					.then((resp) => resp.text())
-					.then((text) => {
-						const random = document.getElementById('random');
-						random.textContent = text;
-					});
-			});
-		</script>
-	</body>
+    <!-- OSM Buildings CSS -->
+    <link rel="stylesheet" href="https://cdn.osmbuildings.org/4.0.0/OSMBuildings.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="icons/logo_spin1.png" />
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <div id="ui-panel" class="industrial-panel">
+        <div class="panel-header">
+            NTOU CAMPUS NAVIGATION SYSTEM
+        </div>
+        <div class="panel-body">
+            <div class="input-group">
+                <label for="from-input">SOURCE LOCATION [FROM]</label>
+                <input type="text" id="from-input" autocomplete="off" placeholder="E.G. ADM OR 1">
+            </div>
+            <div class="input-group">
+                <label for="to-input">DESTINATION [TO]</label>
+                <input type="text" id="to-input" autocomplete="off" placeholder="E.G. LIB OR 3">
+            </div>
+            <button id="navigate-button">EXECUTE NAVIGATION</button>
+        </div>
+        <div class="panel-footer">
+            SYSTEM STATUS: <span id="status-message">INITIALIZING...</span>
+        </div>
+    </div>
+
+    <!-- Scripts (ONLY LOAD ONCE, AT BOTTOM) -->
+    <script src="https://cdn.osmbuildings.org/4.0.0/OSMBuildings.js"></script>
+    <script src="script.js"></script>
+
+
+
+
+    <!--<script>
+       const frames = ['icons/logo_spin1.svg', 'icons/logo_spin2.svg', 'icons/logo_spin3.svg',
+        'icons/logo_spin4.svg', 'icons/logo_spin5.svg', 'icons/logo_spin6.svg',
+        'icons/logo_spin7.svg', 'icons/logo_spin8.svg'];
+
+        let current = 0;
+        const link = document.querySelector("link[rel='icon']");
+
+        setInterval(() => {
+        link.href = frames[current];
+        current = (current + 1) % frames.length;
+        }, 250);
+             
+                                         ...                              
+                         ....:==-..   .:==--:.                            
+                       ..--..               .:-..                         
+                     .:--.                   .-+:.                        
+                     .-..                      .-*:.                      
+                    .-..                         .=-..                    
+                    =:                            .=-.                    
+                   .*.                            .=+.                    
+                   +:                              --.                    
+                   +.                              ::.                    
+                   +.                              .-.                    
+                   *.    .+-.     =%:.             .=.                    
+                   =..=@@%-..      :+%@@@@+..      .+:                    
+                   ..=%%%#*-.     .-=***#%@%:.    .-*:                    
+                .-=:::...::..      ...    ...   .:++=.                    
+                .=:-     .                      .*--=.                    
+                 :=-.                           ..-=-.                    
+                  +-.  .+:............=.        .+:=..                    
+                  .+=.  .-:.......--::.      ....=-.                      
+                   .--.      ::..            .:*=.                        
+                    .:-..                    .-+.                         
+                      .=-.               .=. .--.                         
+                        .+:..         ..-:.. .-:.                         
+                         ..:.:.....  .-:..   .-:.                         
+                           ..:-#=..          .=-.                         
+                              :%=.           .=%:.                        
+                             :%---.          .--+*..                      
+                         ..-+.*..=:.          ....--.                     
+                        .=:..... .=-.                                     
+                                  .+.                                     
+                                   .                                      
+                                                                          
+                                                                          
+                                                                          
+    </script>-->
+</body>
 </html>
