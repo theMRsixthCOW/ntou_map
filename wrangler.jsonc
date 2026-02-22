@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "ntou_mapver13",
+  "name": "ntoumapver13",
   "main": "src/index.ts",
   "account_id": "f35092ce74c9b1a14a1654b39b4179a1",
   "compatibility_date": "2026-02-19",
