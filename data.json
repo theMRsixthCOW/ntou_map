@@ -77,8 +77,8 @@
     "name_ch": "機械A館",
     "code_id": "MEA",
     "location_code": "E3",
-    "lat": 25.1488,
-    "lon": 121.7775
+    "lat":25.15004,
+    "lon":121.77723
   },
   {
     "number": "10",
@@ -113,8 +113,9 @@
     "name_ch": "輪機實習工廠",
     "code_id": "MEW",
     "location_code": "E3",
-    "lat": 25.1523,
-    "lon": 121.7745
+    "lat": 25.14925,
+    "lon": 121.77801,
+                                    "here":" i fiiish untill here" 
   },
   {
     "number": "14",
@@ -122,8 +123,8 @@
     "name_ch": "沛華大樓",
     "code_id": "PHB",
     "location_code": "E3",
-    "lat": 25.1497022,
-    "lon": 121.7782342
+    "lat": 25.14969,
+    "lon": 121.77825
   },
   {
     "number": "15",
@@ -137,11 +138,11 @@
   {
     "number": "16",
     "name": "Yong Spring",
-    "name_ch": "勇泉",
+    "name_ch": "勇泉(不是建築物)",
     "code_id": "YS",
     "location_code": "D2",
-    "lat": 25.1515,
-    "lon": 121.7715
+    "lat": 25.14920,
+    "lon": 121.77842
   },
   {
     "number": "17",
@@ -149,8 +150,8 @@
     "name_ch": "海空大樓",
     "code_id": "MAT",
     "location_code": "D2",
-    "lat": 25.1495542,
-    "lon": 121.7789467
+    "lat": 25.14950,
+    "lon": 121.77889
   },
   {
     "number": "18",
@@ -164,11 +165,11 @@
   {
     "number": "19",
     "name": "Dormitory IV",
-    "name_ch": "第四宿舍",
+    "name_ch": "第四宿舍(男三女二)",
     "code_id": "D4",
     "location_code": "D1",
-    "lat": 25.1518,
-    "lon": 121.771
+    "lat": 25.14863,
+    "lon": 121.77911
   },
   {
     "number": "20",
@@ -176,8 +177,8 @@
     "name_ch": "第二餐廳",
     "code_id": "SR",
     "location_code": "D1",
-    "lat": 25.1524,
-    "lon": 121.77
+    "lat": 25.14864,
+    "lon": 121.77897
   },
   {
     "number": "21",
@@ -185,8 +186,8 @@
     "name_ch": "第三宿舍",
     "code_id": "D3",
     "location_code": "D1",
-    "lat": 25.1553,
-    "lon": 121.7675
+    "lat": 25.14867,
+    "lon": 121.77868
   },
   {
     "number": "22",
@@ -212,8 +213,8 @@
     "name_ch": "運動場",
     "code_id": "AF",
     "location_code": "D4",
-    "lat": 25.1501612,
-    "lon": 121.7806025
+    "lat": 25.15044,
+    "lon": 121.77825
   },
   {
     "number": "25",
@@ -221,8 +222,8 @@
     "name_ch": "籃球場",
     "code_id": "BC",
     "location_code": "E4",
-    "lat": 25.15096,
-    "lon": 121.7801481
+    "lat": 25.15091,
+    "lon": 121.77685
   },
   {
     "number": "26",
@@ -230,8 +231,8 @@
     "name_ch": "海大意象館",
     "code_id": "NLP",
     "location_code": "F4",
-    "lat": 25.15,
-    "lon": 121.774
+    "lat": 25.15117,
+    "lon": 121.77574
   },
   {
     "number": "27",
@@ -239,17 +240,17 @@
     "name_ch": "小艇碼頭",
     "code_id": "SBD",
     "location_code": "F5",
-    "lat": 25.149826,
-    "lon": 121.7829222
+    "lat": 25.15200,
+    "lon": 121.77581
   },
   {
     "number": "28",
     "name": "Dormitory II",
-    "name_ch": "第二宿舍",
+    "name_ch": "第二宿舍（男一）",
     "code_id": "DOR2",
     "location_code": "G1",
-    "lat": 25.1486429,
-    "lon": 121.7786249
+    "lat":  25.14842,
+    "lon": 121.77548
   },
   {
     "number": "29",
@@ -257,8 +258,8 @@
     "name_ch": "射箭場",
     "code_id": "AR",
     "location_code": "F2",
-    "lat": 25.1512424,
-    "lon": 121.772234
+    "lat": 25.14864,
+    "lon": 121.77642
   },
   {
     "number": "30",
@@ -281,11 +282,11 @@
   {
     "number": "32",
     "name": "Longgang Ecological Garden",
-    "name_ch": "龍崗生態園區",
+    "name_ch": "龍崗生態園區（有點沒人管理的感覺）",
     "code_id": "LEG",
     "location_code": "G1",
-    "lat": 25.1486313,
-    "lon": 121.7791198
+    "lat": 25.14881,
+    "lon": 121.77469
   },
   {
     "number": "33",
@@ -311,8 +312,8 @@
     "name_ch": "山海迴廊",
     "code_id": "MSC",
     "location_code": "G3",
-    "lat": 25.1495815,
-    "lon": 121.7730675
+    "lat": 25.14974,
+    "lon": 121.77545
   },
   {
     "number": "36",
@@ -329,8 +330,8 @@
     "name_ch": "景觀公園",
     "code_id": "LP",
     "location_code": "H2",
-    "lat": 25.1486929,
-    "lon": 121.7739115
+    "lat": 25.14904,
+    "lon": 121.77396
   },
   {
     "number": "38",
@@ -338,8 +339,8 @@
     "name_ch": "海事大樓乙棟",
     "code_id": "MB",
     "location_code": "G2",
-    "lat": 25.1496548,
-    "lon": 121.7742568
+    "lat": 25.14935,
+    "lon": 121.77459
   },
   {
     "number": "39",
@@ -347,8 +348,8 @@
     "name_ch": "海事大樓甲棟",
     "code_id": "MA",
     "location_code": "G3",
-    "lat": 25.1496548,
-    "lon": 121.7742568
+    "lat": 25.14979,
+    "lon": 121.77457
   },
   {
     "number": "40",
@@ -356,8 +357,8 @@
     "name_ch": "創校紀念公園",
     "code_id": "FMP",
     "location_code": "G2",
-    "lat": 25.1495781,
-    "lon": 121.7721294
+    "lat": 25.14965,
+    "lon": 121.77422
   },
   {
     "number": "41",
@@ -365,8 +366,8 @@
     "name_ch": "海事大樓丙棟",
     "code_id": "MC",
     "location_code": "H2",
-    "lat": 25.1496548,
-    "lon": 121.7742568
+    "lat": 25.14943,
+    "lon": 121.77400
   },
   {
     "number": "42",
@@ -374,8 +375,8 @@
     "name_ch": "校史博物館",
     "code_id": "CHM",
     "location_code": "H3",
-    "lat": 25.150633,
-    "lon": 121.7758674
+    "lat": 25.15007,
+    "lon": 121.77405
   },
   {
     "number": "43",
@@ -383,8 +384,8 @@
     "name_ch": "環態所館",
     "code_id": "IMEE",
     "location_code": "H2",
-    "lat": 25.1549,
-    "lon": 121.772
+    "lat": 25.14928,
+    "lon": 121.77361
   },
   {
     "number": "44",
@@ -392,8 +393,8 @@
     "name_ch": "養殖溫室",
     "code_id": "AGH",
     "location_code": "H3",
-    "lat": 25.1462,
-    "lon": 121.7815
+    "lat": 25.14973,
+    "lon":  121.77383
   },
   {
     "number": "45",
@@ -410,8 +411,8 @@
     "name_ch": "海洋系館",
     "code_id": "MDB",
     "location_code": "H3",
-    "lat": 25.1506457,
-    "lon": 121.7736688
+    "lat": 25.14983,
+    "lon": 121.77345
   },
   {
     "number": "47",
@@ -419,8 +420,8 @@
     "name_ch": "食安所館",
     "code_id": "FSI",
     "location_code": "H3",
-    "lat": 25.1507588,
-    "lon": 121.7730447
+    "lat": 25.15019,
+    "lon": 121.77359
   },
   {
     "number": "48",
@@ -428,8 +429,8 @@
     "name_ch": "排球場、網球場",
     "code_id": "VTC",
     "location_code": "H3",
-    "lat": 25.1510434,
-    "lon": 121.7793608
+    "lat": 25.15010,
+    "lon": 121.77295
   },
   {
     "number": "49",
@@ -437,8 +438,8 @@
     "name_ch": "環漁系館",
     "code_id": "EBFS",
     "location_code": "I2",
-    "lat": 25.1495781,
-    "lon": 121.7721294
+    "lat": 25.14966,
+    "lon": 121.77227
   },
   {
     "number": "50",
@@ -446,8 +447,8 @@
     "name_ch": "生命科學院館",
     "code_id": "CLS",
     "location_code": "I3",
-    "lat": 25.1502638,
-    "lon": 121.7725701
+    "lat": 25.15049,
+    "lon": 121.77264
   },
   {
     "number": "51",
@@ -464,8 +465,8 @@
     "name_ch": "陸生動物實驗中心",
     "code_id": "TARC",
     "location_code": "H4",
-    "lat": 25.1501551,
-    "lon": 121.779347
+    "lat": 25.15084,
+    "lon": 121.77334
   },
   {
     "number": "53",
@@ -482,8 +483,8 @@
     "name_ch": "木蘭海洋海事教育大樓",
     "code_id": "MMEB",
     "location_code": "I5",
-    "lat": 25.1462,
-    "lon": 121.7815
+    "lat": 25.15149,
+    "lon": 121.77168
   },
   {
     "number": "55",
@@ -491,8 +492,8 @@
     "name_ch": "雨水公園",
     "code_id": "RWP",
     "location_code": "B2",
-    "lat": 25.149121,
-    "lon": 121.7749562
+    "lat": 25.14962,
+    "lon": 121.78275
   },
   {
     "number": "56",
@@ -500,8 +501,8 @@
     "name_ch": "海洋工程綜合實驗館",
     "code_id": "OECL",
     "location_code": "B3",
-    "lat": 25.1502286,
-    "lon": 121.782175
+    "lat": 25.15005,
+    "lon": 121.78211
   },
   {
     "number": "57",
@@ -518,8 +519,8 @@
     "name_ch": "河工一館",
     "code_id": "RHE1",
     "location_code": "B3",
-    "lat": 25.1518,
-    "lon": 121.771
+    "lat": 25.15049,
+    "lon": 121.78183
   },
   {
     "number": "59",
@@ -527,8 +528,8 @@
     "name_ch": "沙灘排球場",
     "code_id": "SVC",
     "location_code": "B4",
-    "lat": 25.1524,
-    "lon": 121.77
+    "lat": 25.15078,
+    "lon": 121.78193
   },
   {
     "number": "60",
@@ -536,8 +537,8 @@
     "name_ch": "造船系館",
     "code_id": "NAD",
     "location_code": "B3",
-    "lat": 25.1523,
-    "lon": 121.7745
+    "lat": 25.15027,
+    "lon": 121.78151
   },
   {
     "number": "61",
@@ -545,8 +546,8 @@
     "name_ch": "工學院、第三餐廳",
     "code_id": "COE",
     "location_code": "C3",
-    "lat": 25.1501612,
-    "lon": 121.7806025
+    "lat": 25.15046,
+    "lon": 121.78097
   },
   {
     "number": "62",
@@ -572,8 +573,8 @@
     "name_ch": "資工系館",
     "code_id": "CSE",
     "location_code": "C4",
-    "lat": 25.1507194,
-    "lon": 121.7806104
+    "lat": 25.15092,
+    "lon": 121.78004
   },
   {
     "number": "65",
@@ -590,8 +591,8 @@
     "name_ch": "海洋生物培育館",
     "code_id": "MBC",
     "location_code": "C4",
-    "lat": 25.1505886,
-    "lon": 121.7754352
+    "lat": 25.15137,
+    "lon": 121.78053
   },
   {
     "number": "67",
@@ -599,14 +600,14 @@
     "name_ch": "聲學實驗中心",
     "code_id": "ARL",
     "location_code": "B4",
-    "lat": 25.150306,
-    "lon": 121.7725194
+    "lat": 25.15111,
+    "lon": 121.78128
   },
   {
     "number": "68",
     "name": "Computing & Integrated Teaching Building",
     "name_ch": "電資暨綜合教學大樓",
-    "code_id": "CITB",
+    "code_id": "ECG",
     "location_code": "C4",
     "lat": 25.1507117,
     "lon": 121.779926
@@ -626,7 +627,7 @@
     "name_ch": "河工二館",
     "code_id": "RHE2",
     "location_code": "A2",
-    "lat": 25.1524,
-    "lon": 121.77
+    "lat": 25.15016,
+    "lon": 121.78276
   }
 ]
