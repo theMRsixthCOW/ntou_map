@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
   <title>NTOU-3D-MAP</title>
-  <meta property="og:description" content="Use extrusions to display buildings' height in 3D." />
+  <meta property="og:description" content="海洋大學的3D地圖啊 w(ﾟДﾟ)w ， 輸入ID或名稱就能找到建築物，還能規劃路線。有comment請用内建的“聯絡我們”匿名投稿（不用害羞，只用了json所以根本看不到是誰發的）" />
   <meta charset='utf-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.19.0/dist/maplibre-gl.css' />
   <script src='https://unpkg.com/maplibre-gl@5.19.0/dist/maplibre-gl.js'></script>
   <script src="find.js"></script>
   <link href="logo.png" rel="icon" type="image/png">
+  <link rel="stylesheet" href="eye_style.css">
+  <link rel="stylesheet" href="index.css">
+
   <style>
       body { margin: 0; padding: 0; }
       html, body, #map { height: 100%; }
@@ -16,7 +19,7 @@
 </head>
 <body>
 <div id="map"></div>
-<!--             maybe this is me                                                      
+<!--             maybe this is me        這只是一個工具 因爲我很討厭記建築物編號 什麽INS 什麽OPE                                      
                                          :+*###**#+:                                    
                                       +@@@@@@@@@@@@@%#:                                 
                                     #@@@@@@@%#%%%%%%%%%%*                               
@@ -137,14 +140,23 @@ async function getRoute(points) {
 }
 
 </script>
-<input type="search" id="fname" placeholder=" ADM or 行政大樓 or 1（地圖上的編號）" style="position: absolute; top: 10px; left: 10px; z-index: 1; padding: 5px; background: white; border: 1px solid #ccc; width: 400px;" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
-<input type="search" id="destination" placeholder="目的地（例如：圖書館）" style="position: absolute; top: 50px; left: 10px; z-index: 1; padding: 5px; background: white; border: 1px solid #ccc; width: 400px;" onkeypress="if(event.key === 'Enter') { findRoute(); }">
+<div class="search-container inputbar">
+  <input type="search" id="fname" placeholder=" ADM or 行政大樓 or 1（地圖上的編號）" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
+  <button onclick="findBuilding()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
+</div>
+<div class="search-container inputbar2">
+  <input type="search" id="destination" placeholder="目的地（例如：圖書館）" onkeypress="if(event.key === 'Enter') { findRoute(); }">
+  <button onclick="findRoute()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
+</div>
+
 <input type="hidden" id="lat-input">
 <input type="hidden" id="lng-input">
 <input type="hidden" id="lat-destination">
 <input type="hidden" id="lng-destination">
 
+<script src="eye_window.js"></script>
 
+<img src="report.png" alt="report_window" title="聯絡我們" class="report-window-icon" onclick="openReportWindow()">
 
 </body>
 </html>

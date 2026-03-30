@@ -1,0 +1,49 @@
+.search-container {
+    position: absolute;
+    left: 10px;
+    z-index: 1;
+    display: flex;
+    background: white;
+    border: 1px solid #ccc;
+    width: 400px;
+    box-sizing: border-box;
+    align-items: center;
+    padding-right: 5px;
+}
+
+.search-container input {
+    border: none;
+    padding: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.search-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.search-container button img {
+    width: 20px;
+    height: 20px;
+}
+
+.inputbar {
+    top: 10px;
+}
+
+.inputbar2 {
+    top: 50px;
+}
+
+@media (max-width: 600px) {
+
+    /* Use a responsive width for mobile devices */
+    .search-container {
+        width: calc(100% - 20px);
+    }
+}
