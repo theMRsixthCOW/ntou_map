@@ -154,9 +154,42 @@ async function getRoute(points) {
 <input type="hidden" id="lat-destination">
 <input type="hidden" id="lng-destination">
 
-<script src="eye_window.js"></script>
 
 <img src="report.png" alt="report_window" title="聯絡我們" class="report-window-icon" onclick="openReportWindow()">
 
+<!-- Report / Contact Window -->
+<div id="report-window" class="report-window">
+  <div id="report-window-header" class="report-window-header">
+    <span class="report-window-title">聯絡我們</span>
+    <img src="https://cdn-icons-png.flaticon.com/128/9068/9068699.png" class="report-close-btn" onclick="closeReportWindow()" title="關閉">
+  </div>
+  <div class="report-window-body">
+    <div class="report-eye-container">
+      <div class="eye-wrapper">
+        <div class="eye-ball"></div>
+      </div>
+    </div>
+    <div class="report-window-text">
+      <p id="reporttext001" class="report-window-text001">&gt; 有什麼事嗎？</p>
+      <p id="reporttext002" class="report-window-text002">&gt; 請選擇類型：</p>
+    </div>
+    <!-- Step 1: Topic selection buttons -->
+    <div id="report-topic-buttons" class="report-topic-buttons">
+      <button class="report-topic-btn" onclick="selectTopic('聯絡我們')">💬 聯絡我們</button>
+      <button class="report-topic-btn" onclick="selectTopic('回報錯誤or建議')">🐛 回報錯誤 / 建議</button>
+      <button class="report-topic-btn" onclick="selectTopic('我想要改造建築物')">🏗️ 我想改造建築物</button>
+    </div>
+    <!-- Step 2: Message input (hidden until topic is chosen) -->
+    <div id="report-input-area" class="report-input-area" style="display:none;">
+      <textarea id="report-message" class="report-textarea" placeholder="在這裡輸入你的訊息..."></textarea>
+      <div class="report-actions">
+        <button class="report-back-btn" onclick="resetReport()">← 返回</button>
+        <button class="report-send-btn" onclick="submitReport()">送出 ✉️</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="eye_window.js"></script>
 </body>
 </html>

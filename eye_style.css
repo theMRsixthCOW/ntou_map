@@ -1,37 +1,12 @@
-/* Changed global body/html to a specific class to avoid breaking index.html layout */
-.eye-background {
-    margin: 0;
-    padding: 0;
-    background-color: black;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.container {
-    display: flex;
-    gap: 40px;
-    /* Space between centers of eyes, or wrappers */
-    /* If wrappers are 0 size, this might be tricky. Let's make wrappers have size. */
-}
-
-.eye_window_header {
-    width: 5px;
-    cursor: move;
-
-
-}
+/* =============================================
+   Eye Ball Animation
+   ============================================= */
 
 .eye-wrapper {
-    width: 60px;
-    height: 60px;
+    width: 44px;
+    height: 44px;
     position: relative;
-    /* We will animate 'transform' on this element via JS */
     transition: transform 1.5s ease-out;
-    /* Match JS move duration */
 }
 
 .eye-ball {
@@ -39,67 +14,253 @@
     height: 100%;
     background-color: white;
     border-radius: 50%;
-    /* Blink animation on the ball */
     animation: blink 4s infinite;
 }
 
 @keyframes blink {
-
-    0%,
-    96%,
-    100% {
-        transform: scaleY(1);
-    }
-
-    98% {
-        transform: scaleY(0.1);
-    }
+    0%, 96%, 100% { transform: scaleY(1); }
+    98%           { transform: scaleY(0.1); }
 }
 
-.eye_window_container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-    gap: 40px;
-    z-index: 1000;
 
-}
+/* =============================================
+   Report / Contact Button (bottom-right icon)
+   ============================================= */
 
 .report-window-icon {
     position: fixed;
-    width: 80px;
-    height: 80px;
-    bottom: 40px;
+    width: 72px;
+    height: 72px;
+    bottom: 36px;
     right: 20px;
-    z-index: 2;
-    opacity: 0.5;
-    /* Ensure it stays visible on all devices  dont know how it works tho*/
-    transform: translateZ(0);
+    z-index: 100;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateZ(0);           /* GPU layer for mobile */
     -webkit-transform: translateZ(0);
 }
 
-@media (max-width: 600px) {
+.report-window-icon:hover {
+    opacity: 1;
+    transform: scale(1.1) translateZ(0);
+}
 
-    /*this is for mobile web */
+@media (max-width: 600px) {
     .report-window-icon {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         bottom: 55px;
-        right: 15px;
+        right: 14px;
     }
 }
 
+
+/* =============================================
+   Report Window — floating draggable panel
+   ============================================= */
+
 .report-window {
-    display: none;
-    position: absolute;
+    display: none;           /* toggled by JS */
+    flex-direction: column;
+    position: fixed;         /* fixed so drag (offsetTop/Left) works correctly */
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 300px;
-    background-color: black;
-    border-radius: 10px;
+    transform: translate(-50%, -50%);   /* initial centering; cleared on first drag */
+    width: 360px;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 80px);
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
     z-index: 1000;
+    font-family: 'Courier New', monospace;
+    color: #c9d1d9;
+}
+
+
+/* --- Header (drag handle) --- */
+
+.report-window-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #1a1a2e;
+    border-bottom: 1px solid #333;
+    cursor: move;             /* set via JS too, but CSS gives instant feedback */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.report-window-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #8b949e;
+    text-transform: uppercase;
+}
+
+.report-close-btn {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s, transform 0.2s;
+    filter: invert(1);
+}
+
+.report-close-btn:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+
+/* --- Body --- */
+
+.report-window-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 14px 14px;
+    gap: 12px;
+    overflow-y: auto;
+}
+
+
+/* --- Eye inside the window --- */
+
+.report-eye-container {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* --- Chat-style text --- */
+
+.report-window-text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.report-window-text001,
+.report-window-text002 {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8b949e;
+}
+
+.report-window-text002 {
+    color: #c9d1d9;
+}
+
+/* Blue highlight when a topic is selected */
+.report-topic-selected {
+    color: #4fc3f7 !important;
+}
+
+
+/* --- Topic buttons --- */
+
+.report-topic-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.report-topic-btn {
+    background: #1e1e2e;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: #c9d1d9;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    font-family: inherit;
+}
+
+.report-topic-btn:hover {
+    background: #2a2a3e;
+    border-color: #4fc3f7;
+    color: #e6edf3;
+    transform: translateX(4px);
+}
+
+
+/* --- Message input area --- */
+
+.report-input-area {
+    display: none;          /* shown by JS */
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.report-textarea {
+    width: 100%;
+    min-height: 90px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px;
+    color: #e6edf3;
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.report-textarea:focus {
+    border-color: #4fc3f7;
+}
+
+.report-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.report-back-btn {
+    background: transparent;
+    border: 1px solid #30363d;
+    border-radius: 7px;
+    padding: 7px 14px;
+    color: #8b949e;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.report-back-btn:hover {
+    border-color: #8b949e;
+    color: #c9d1d9;
+}
+
+.report-send-btn {
+    background: #4fc3f7;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 16px;
+    color: #0d1117;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.report-send-btn:hover {
+    background: #81d4fa;
+    transform: translateY(-1px);
 }

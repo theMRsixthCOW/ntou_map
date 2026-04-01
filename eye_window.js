@@ -1,168 +1,214 @@
+// =============================================
+//  Supabase Config
+//  Setup steps: see README or ask Antigravity
+//  The anon key is SAFE to expose - RLS only allows inserts
+// =============================================
+
+const SUPABASE_CONFIG = {
+    url:     "https://YOUR_PROJECT_ID.supabase.co",  // Project URL
+    anonKey: "YOUR_ANON_KEY",                        // anon/public key
+    table:   "reports",
+};
+
+// =============================================
+//  Eye Animation
+// =============================================
+
 const eyeWrappers = document.querySelectorAll('.eye-wrapper');
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 
-// Track mouse position
 window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
 });
 
 function moveEyes() {
-    // Store proposed moves to check for collisions
     const eyeMoves = [];
-    const eyeCenters = [];
 
-    // 1. Calculate proposed moves
-    eyeWrappers.forEach((wrapper, index) => {
+    eyeWrappers.forEach((wrapper) => {
         const rect = wrapper.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        
-        eyeCenters.push({ x: centerX, y: centerY });
 
-        // Calculate angle towards mouse
         const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
-        
-        // Move 2cm (approx 75px) towards pointer
-        const moveX = Math.cos(angle) * 75;
-        const moveY = Math.sin(angle) * 75;
+        const moveX = Math.cos(angle) * 12; // keep movement subtle inside small window
+        const moveY = Math.sin(angle) * 12;
 
-        eyeMoves.push({ 
-            wrapper, 
-            moveX, 
-            moveY,
-            proposedX: centerX + moveX, 
-            proposedY: centerY + moveY 
-        });
+        eyeMoves.push({ wrapper, moveX, moveY });
     });
 
-    // 2. Check and Resolve Collision
-    if (eyeMoves.length === 2) {
-        const p1 = eyeMoves[0];
-        const p2 = eyeMoves[1];
-        
-        const dx = p2.proposedX - p1.proposedX;
-        const dy = p2.proposedY - p1.proposedY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const minDistance = 85; // 80px diameter + 5px margin
-
-        if (distance < minDistance) {
-            // Collision detected! Push them apart.
-            const overlap = minDistance - distance;
-            const angle = Math.atan2(dy, dx); // Angle from p1 to p2
-            
-            const pushX = Math.cos(angle) * (overlap / 2);
-            const pushY = Math.sin(angle) * (overlap / 2);
-            
-            p1.moveX -= pushX;
-            p1.moveY -= pushY;
-            p2.moveX += pushX;
-            p2.moveY += pushY;
-        }
-    }
-
-    // 3. Apply moves
     eyeMoves.forEach(item => {
-        // Phase 1: Move towards pointer
         item.wrapper.style.transition = "transform 0.75s ease-out";
         item.wrapper.style.transform = `translate(${item.moveX}px, ${item.moveY}px)`;
 
-        // Phase 2: Wait 1.5s, then move back to center
         setTimeout(() => {
             item.wrapper.style.transition = "transform 2s ease-in-out";
             item.wrapper.style.transform = `translate(0px, 0px)`;
         }, 1500);
     });
 }
+
+setInterval(moveEyes, 4000);
+
+
+// =============================================
+//  Report Window — open / close / toggle
+// =============================================
+
 let reportWindowOpen = false;
-async function openReportWindow(){
-    if(reportWindowOpen){
-        document.getElementById("report-window").style.display = "none";
+let currentTopic = "";  // tracks the topic selected in step 1
+
+function openReportWindow() {
+    const win = document.getElementById("report-window");
+    if (reportWindowOpen) {
+        win.style.display = "none";
         reportWindowOpen = false;
-        return;
+    } else {
+        win.style.display = "flex";
+        reportWindowOpen = true;
     }
-    document.getElementById("report-window").style.display = "block";
-    reportWindowOpen = true;
-    
 }
-<html>
-    <div id="report-window" class="report-window">
-      <div id="report-window-header" class="report-window-header"><img src="https://cdn-icons-png.flaticon.com/128/9068/9068699.png" onclick="closeReportWindow()">
-      </div>
-      <div class="container">
-        <div class="eye-wrapper">
-            <div class="eye-ball"></div>
-        </div>
-      </div>
 
-      <div class="report-window-text">
-      <p id="reporttext001" class="report-window-text001"></p>
-      <p id="reporttext002" class="report-window-text002"></p>
-      <p id="reporttext003" class="report-window-text001"></p>
-      </div>   
-    </div>
-</html>
-
-function closeReportWindow(){
+function closeReportWindow() {
     document.getElementById("report-window").style.display = "none";
     reportWindowOpen = false;
 }
 
 
+// =============================================
+//  Report Window — step-by-step state machine
+// =============================================
+
+function selectTopic(topic) {
+    currentTopic = topic;   // remember for submitReport()
+
+    document.getElementById("report-topic-buttons").style.display = "none";
+    document.getElementById("reporttext001").textContent = "> " + topic;
+    document.getElementById("reporttext001").classList.add("report-topic-selected");
+    document.getElementById("reporttext002").textContent = getTopicPrompt(topic);
+    document.getElementById("report-input-area").style.display = "flex";
+    document.getElementById("report-message").focus();
+}
+
+function getTopicPrompt(topic) {
+    if (topic === "聯絡我們")           return "> 請問你要告訴我們什麼？";
+    if (topic === "回報錯誤or建議")     return "> 請描述錯誤或建議的內容：";
+    if (topic === "我想要改造建築物")   return "> 真的嗎？請提供聯絡方式，作者會盡量聯絡你（不會泄露你的資料）：";
+    return "> 請輸入你的訊息：";
+}
+
+function resetReport() {
+    // Go back to step 1
+    document.getElementById("report-topic-buttons").style.display = "flex";
+    document.getElementById("report-input-area").style.display = "none";
+    document.getElementById("reporttext001").textContent = "> 有什麼事嗎？";
+    document.getElementById("reporttext001").classList.remove("report-topic-selected");
+    document.getElementById("reporttext002").textContent = "> 請選擇類型：";
+    document.getElementById("report-message").value = "";
+}
+
+async function submitReport() {
+    const msg = document.getElementById("report-message").value.trim();
+    if (!msg) {
+        document.getElementById("report-message").style.border = "1px solid #f44336";
+        return;
+    }
+
+    // Disable button while submitting
+    const sendBtn = document.querySelector(".report-send-btn");
+    if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = "送出中…"; }
+
+    const record = {
+        type:    currentTopic || "未分類",
+        message: msg,
+        time:    new Date().toISOString(),   // e.g. "2026-03-31T01:33:00.000Z"
+    };
+
+    try {
+        const res = await fetch(
+            `${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`,
+            {
+                method:  "POST",
+                headers: {
+                    "apikey":        SUPABASE_CONFIG.anonKey,
+                    "Authorization": `Bearer ${SUPABASE_CONFIG.anonKey}`,
+                    "Content-Type":  "application/json",
+                    "Prefer":        "return=minimal",
+                },
+                body: JSON.stringify(record),
+            }
+        );
+
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error(`HTTP ${res.status}: ${err}`);
+        }
+
+        // ── Success ──
+        document.getElementById("report-topic-buttons").style.display = "none";
+        document.getElementById("report-input-area").style.display = "none";
+        document.getElementById("reporttext001").textContent = "> 謝謝！";
+        document.getElementById("reporttext001").classList.add("report-topic-selected");
+        document.getElementById("reporttext002").textContent = "> 我們已收到你的訊息 🙌";
+        setTimeout(resetReport, 4000);
+
+    } catch (err) {
+        console.error("[report] Failed to submit:", err);
+        document.getElementById("reporttext002").textContent = "> 提交失敗，請稍後再試 😢";
+        if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = "送出 ✉️"; }
+    }
+}
+
+
+// =============================================
+//  Draggable Window
+// =============================================
+
 dragElement(document.getElementById("report-window"));
 
 function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "-header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "-header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
+    if (!elmnt) return; // null-guard: don't crash if element missing
 
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const header = document.getElementById(elmnt.id + "-header");
 
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
+    if (header) {
+        header.style.cursor = "move";
+        header.onmousedown = dragMouseDown;
+    } else {
+        elmnt.onmousedown = dragMouseDown;
+    }
 
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+
+        // Convert CSS transform-centering to real pixel top/left so drag math works
+        const rect = elmnt.getBoundingClientRect();
+        elmnt.style.top       = rect.top  + "px";
+        elmnt.style.left      = rect.left + "px";
+        elmnt.style.transform = "none"; // disable the translate(-50%,-50%) centering
+
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup   = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top  = (elmnt.offsetTop  - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup   = null;
+        document.onmousemove = null;
+    }
 }
-
-// Start the loop
-// Initial call to start immediately? Or wait 4s?
-// User said: "loop"
-// prompt says "muts blink every 4 secs ... eyes will go ... loop"
-// User implies concurrent loops or synchronized?
-// "eyes will go towards the pointer [takes 1.5s] ... go back [takes 2s] then loop"
-// Total movement cycle = 1.5s + 2s = 3.5s.
-// Plus maybe a pause? User didn't specify pause, just "then loop".
-// If I use 4000ms interval, there is a 0.5s pause.
-// Prompt for blink is "every 4 secs".
-// Movement and blink don't have to be perfectly synced, but let's stick to the user's snippet logic of 4000ms loop for movement too.
-
-setInterval(moveEyes, 4000);
