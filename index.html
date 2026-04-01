@@ -155,7 +155,7 @@ async function getRoute(points) {
 <input type="hidden" id="lng-destination">
 
 
-<img src="report.png" alt="report_window" title="聯絡我們" class="report-window-icon" onclick="openReportWindow()">
+<img src="report.png" alt="report_window" title="聯絡我們" class="report-window-icon" onclick="openReportWindow() ">
 
 <!-- Report / Contact Window -->
 <div id="report-window" class="report-window">
@@ -175,9 +175,9 @@ async function getRoute(points) {
     </div>
     <!-- Step 1: Topic selection buttons -->
     <div id="report-topic-buttons" class="report-topic-buttons">
-      <button class="report-topic-btn" onclick="selectTopic('聯絡我們')">💬 聯絡我們</button>
-      <button class="report-topic-btn" onclick="selectTopic('回報錯誤or建議')">🐛 回報錯誤 / 建議</button>
-      <button class="report-topic-btn" onclick="selectTopic('我想要改造建築物')">🏗️ 我想改造建築物</button>
+      <button class="report-topic-btn" onclick="selectTopic('聯絡我們')">聯絡我們</button>
+      <button class="report-topic-btn" onclick="selectTopic('回報錯誤or建議')">回報錯誤 / 建議</button>
+      <button class="report-topic-btn" onclick="selectTopic('我想要改造建築物')">我想改造建築物</button>
     </div>
     <!-- Step 2: Message input (hidden until topic is chosen) -->
     <div id="report-input-area" class="report-input-area" style="display:none;">

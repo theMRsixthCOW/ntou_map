@@ -50,6 +50,9 @@ async function findSimilarBuilding(query) {
 }
 
 async function findBuilding(updateUrl = true) {
+    // Clear any existing route from the map when searching for a new start building
+    if (typeof clearMapRoute === 'function') clearMapRoute();
+
     const fnameInput = document.getElementById('fname');
     if (!fnameInput) return;
     const query = fnameInput.value;
@@ -65,7 +68,7 @@ async function findBuilding(updateUrl = true) {
         url.searchParams.set('fname', query);
         window.history.pushState({}, '', url);
     }
-
+    
     const match = await findSimilarBuilding(query);
     
     if (match) {
@@ -87,12 +90,42 @@ async function findBuilding(updateUrl = true) {
     }
 }
 
+function clearRouteInputs() {
+    if (document.getElementById('lat-input')) document.getElementById('lat-input').value = "";
+    if (document.getElementById('lng-input')) document.getElementById('lng-input').value = "";
+    if (document.getElementById('lat-destination')) document.getElementById('lat-destination').value = "";
+    if (document.getElementById('lng-destination')) document.getElementById('lng-destination').value = "";
+}
+
+function clearMapRoute() {
+    if (typeof map !== 'undefined') {
+        if (map.getLayer('route-line')) {
+            map.removeLayer('route-line');
+        }
+        if (map.getSource('route')) {
+            map.removeSource('route');
+        }
+    }
+}
+
 async function findRoute() {
+    // 1. Clear any existing route line from the map
+    clearMapRoute();
+
+    // 2. Close any map pop-out windows (popups) currently open
+    const popups = document.querySelectorAll('.maplibregl-popup');
+    popups.forEach(popup => popup.remove());
+
+
     const destInput = document.getElementById('destination');
     if (!destInput) return;
     const query = destInput.value;
     
-    if (!query) return;
+    if (!query) {
+        if (document.getElementById('lat-destination')) document.getElementById('lat-destination').value = "";
+        if (document.getElementById('lng-destination')) document.getElementById('lng-destination').value = "";
+        return;
+    }
 
     const match = await findSimilarBuilding(query);
     
