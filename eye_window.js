@@ -6,8 +6,8 @@
 
 const SUPABASE_CONFIG = {
     url:     "https://bqkxkiijcuqowzyipniu.supabase.co",             // Project URL
-    anonKey: "sb_publishable_rOSwGSqV__qMDDSVxrAcFg_xHyg18ps",       // anon/public key
-    table:   "reports",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxa3hraWlqY3Vxb3d6eWlwbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NzAxNzIsImV4cCI6MjA5MDU0NjE3Mn0.FTiQ4PkKXy82HmT4USQjqPqC_tPriKOs3h14HrQ2MLc",       // anon/public key
+    table:   "report",
 };
 
 // =============================================
@@ -148,15 +148,15 @@ async function submitReport() {
         // ── Success ──
         document.getElementById("report-topic-buttons").style.display = "none";
         document.getElementById("report-input-area").style.display = "none";
-        document.getElementById("reporttext001").textContent = "> 謝謝！";
+        document.getElementById("reporttext001").textContent = "> 謝謝！w(ﾟДﾟ)w";
         document.getElementById("reporttext001").classList.add("report-topic-selected");
-        document.getElementById("reporttext002").textContent = "> 我們已收到你的訊息 🙌";
+        document.getElementById("reporttext002").textContent = "> 收到！";
         setTimeout(resetReport, 4000);
 
     } catch (err) {
         console.error("[report] Failed to submit:", err);
-        document.getElementById("reporttext002").textContent = "> 提交失敗，請稍後再試 😢";
-        if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = "送出 ✉️"; }
+        document.getElementById("reporttext002").textContent = "> 提交失敗，請稍後再試下 w(ﾟДﾟ)w";
+        if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = "送出"; }
     }
 }
 

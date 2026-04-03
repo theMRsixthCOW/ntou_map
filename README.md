@@ -51,6 +51,16 @@ This application can be run entirely in the browser but requires a local develop
 
 3. Access the application by navigating to `http://localhost:3000` in your web browser.
 
+### Supabase Setup (Reporting System)
+
+To enable the user reporting system, you must configure a Supabase project:
+
+1. Create a new project on [Supabase](https://supabase.com/).
+2. Under **Table Editor**, create a new table named **`report`** with your desired columns (e.g., `type`, `message`, `time`).
+3. Under **Project Settings -> API**, copy your **Project URL** and the **`anon / public` API key** (this is a long JWT string starting with `eyJ`).
+4. Paste these into the `SUPABASE_CONFIG` object at the top of `eye_window.js`.
+5. Finally, navigate to **Authentication -> Policies** (or Database -> Policies), find the `report` table, and click **Create policy**. Choose the **"Enable insert access for anonymous users"** template (ensuring the target role is set to `anon`) and save it. This is mandatory; otherwise, Supabase will block submissions with a `401 Unauthorized` Row-Level Security error.
+
 ## Usage Guide
 
 ### 1. Navigating the Map
