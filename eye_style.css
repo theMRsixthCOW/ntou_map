@@ -108,13 +108,13 @@
     height: 20px;
     cursor: pointer;
     opacity: 0.5;
-    transition: opacity 0.2s, transform 0.2s;
-    filter: invert(1);
-}
 
-.report-close-btn:hover {
-    opacity: 1;
-    transform: rotate(90deg);
+}
+@media (max-width: 600px) {
+    .report-close-btn {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 
@@ -189,8 +189,8 @@
 
 .report-topic-btn:hover {
     background: #2a2a3e;
-    border-color: #4fc3f7;
-    color: #e6edf3;
+    border-color: #c2c2c2;
+    color: #ffffff;
     transform: translateX(4px);
 }
 

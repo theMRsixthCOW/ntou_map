@@ -92,9 +92,9 @@ function selectTopic(topic) {
 }
 
 function getTopicPrompt(topic) {
-    if (topic === "聯絡我們")           return "> 請問你要告訴我們什麼？";
+    if (topic === "聯絡我們")           return "> 請問你要告訴我們什麼？（請不要告我，這只是工具  ┌( ´_ゝ` )┐）";
     if (topic === "回報錯誤or建議")     return "> 請描述錯誤或建議的內容：";
-    if (topic === "我想要改造建築物")   return "> 真的嗎？請提供聯絡方式，作者會盡量聯絡你（不會泄露你的資料）：";
+    if (topic === "我想要改造建築物")   return "> 真的嗎？請提供聯絡方式，作者會盡量聯絡你（當然不會泄露你的資料，我也不知道要幹嘛）：";
     return "> 請輸入你的訊息：";
 }
 
