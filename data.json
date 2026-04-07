@@ -454,7 +454,7 @@
     "number": "51",
     "name": "Food Science Engineering Building",
     "name_ch": "食品工程館",
-    "code_id": "FSE",
+    "code_id": "MFE",
     "location_code": "H4",
     "lat": 25.1507588,
     "lon": 121.7730447
@@ -472,7 +472,7 @@
     "number": "53",
     "name": "Food Science Building",
     "name_ch": "食品科學系館",
-    "code_id": "FS",
+    "code_id": "MFS",
     "location_code": "H4",
     "lat": 25.1506457,
     "lon": 121.7736688
