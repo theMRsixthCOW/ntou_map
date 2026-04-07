@@ -40,10 +40,9 @@
     top: 50px;
 }
 
-@media (max-width: 600px) {
-
-    /* Use a responsive width for mobile devices */
+@media (max-width: 500px) {
     .search-container {
-        width: calc(100% - 20px);
+        width: calc(100% - 110px);
+
     }
-}
+}
