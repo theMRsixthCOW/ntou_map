@@ -13,6 +13,38 @@ async function getBuildings() {
     return buildingsData;
 }
 
+// ── Locate User via Geolocation API (Plain logic for mobile) ──
+function locateUser() {
+    if (!navigator.geolocation) {
+        alert('您的瀏覽器不支援定位功能 (Geolocation not supported)');
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            const fnameInput = document.getElementById('fname');
+            if (fnameInput) fnameInput.value = '我的位置';
+
+            document.getElementById('lat-input').value = lat;
+            document.getElementById('lng-input').value = lng;
+
+            if (typeof map !== 'undefined') {
+                map.flyTo({ center: [lng, lat], zoom: 17 });
+                new maplibregl.Marker()
+                    .setLngLat([lng, lat])
+                    .addTo(map);
+            }
+        },
+        (error) => {
+            alert('定位失敗 (Location error)');
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+}
+
 function calculateSimilarity(str1, str2) {
     str1 = (str1 || '').toString().toLowerCase().trim();
     str2 = (str2 || '').toString().toLowerCase().trim();
@@ -28,7 +60,7 @@ function calculateSimilarity(str1, str2) {
 
 async function findSimilarBuilding(query) {
     const buildings = await getBuildings();
-    let bestMatch = null;
+    let bestMatches = [];
     let maxScore = -1;
 
     // Fields to compare: "number" or "name" or "name_ch" or "code_id" or "location_code"
@@ -43,10 +75,12 @@ async function findSimilarBuilding(query) {
 
         if (score > maxScore && score > 0) {
             maxScore = score;
-            bestMatch = b;
+            bestMatches = [b];
+        } else if (score === maxScore && score > 0) {
+            bestMatches.push(b);
         }
     }
-    return bestMatch;
+    return bestMatches;
 }
 
 async function findBuilding(updateUrl = true) {
@@ -79,21 +113,30 @@ async function findBuilding(updateUrl = true) {
         }
     }
     
-    const match = await findSimilarBuilding(query);
+    const matches = await findSimilarBuilding(query);
     
-    if (match) {
+    if (matches && matches.length > 0) {
+        const match = matches[0];
         document.getElementById('lat-input').value = match.lat;
         document.getElementById('lng-input').value = match.lon;
         
         console.log("Start Building Found:", match.name_ch || match.name);
         
         if (typeof map !== 'undefined') {
-            map.flyTo({ center: [match.lon, match.lat], zoom: 18 });
+            if (matches.length === 1) {
+                map.flyTo({ center: [match.lon, match.lat], zoom: 18 });
+            } else {
+                const bounds = new maplibregl.LngLatBounds();
+                matches.forEach(m => bounds.extend([m.lon, m.lat]));
+                map.fitBounds(bounds, { padding: 50 });
+            }
             
-            new maplibregl.Popup()
-                .setLngLat([match.lon, match.lat])
-                .setHTML(`<strong>起始地 (Start)</strong><br>${match.name_ch}<br>${match.name}`)
-                .addTo(map);
+            matches.forEach(m => {
+                new maplibregl.Popup()
+                    .setLngLat([m.lon, m.lat])
+                    .setHTML(`<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`)
+                    .addTo(map);
+            });
         }
     } else {
         alert("找不到相符的起點建築物 (Start building not found)");
@@ -111,6 +154,9 @@ function clearMapRoute() {
     if (typeof map !== 'undefined') {
         if (map.getLayer('route-line')) {
             map.removeLayer('route-line');
+        }
+        if (map.getLayer('route-distance')) {
+            map.removeLayer('route-distance');
         }
         if (map.getSource('route')) {
             map.removeSource('route');
@@ -132,9 +178,10 @@ async function findRoute() {
         return;
     }
 
-    const match = await findSimilarBuilding(query);
+    const matches = await findSimilarBuilding(query);
     
-    if (match) {
+    if (matches && matches.length > 0) {
+        const match = matches[0];
         document.getElementById('lat-destination').value = match.lat;
         document.getElementById('lng-destination').value = match.lon;
         
@@ -144,19 +191,35 @@ async function findRoute() {
         const startLng = document.getElementById('lng-input').value;
 
         if (typeof map !== 'undefined') {
-            new maplibregl.Popup()
-                .setLngLat([match.lon, match.lat])
-                .setHTML(`<strong>目的地 (Destination)</strong><br>${match.name_ch}<br>${match.name}`)
-                .addTo(map);
+            matches.forEach(m => {
+                new maplibregl.Popup()
+                    .setLngLat([m.lon, m.lat])
+                    .setHTML(`<strong>目的地 (Destination)</strong><br>${m.name_ch}<br>${m.name}`)
+                    .addTo(map);
+            });
             
             if (startLat && startLng) {
+                // Show start building popup if fname was filled in
+                const fnameQuery = document.getElementById('fname') ? document.getElementById('fname').value : '';
+                if (fnameQuery) {
+                    const startMatches = await findSimilarBuilding(fnameQuery);
+                    if (startMatches && startMatches.length > 0) {
+                        startMatches.forEach(m => {
+                            new maplibregl.Popup()
+                                .setLngLat([m.lon, m.lat])
+                                .setHTML(`<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`)
+                                .addTo(map);
+                        });
+                    }
+                }
+
                 // Have both start and destination, fly to fit bounds and getRoute
                 const p1 = [parseFloat(startLng), parseFloat(startLat)];
                 const p2 = [match.lon, match.lat];
                 
                 const bounds = new maplibregl.LngLatBounds();
                 bounds.extend(p1);
-                bounds.extend(p2);
+                matches.forEach(m => bounds.extend([m.lon, m.lat]));
                 map.fitBounds(bounds, { padding: 50 });
                 
                 if (typeof getRoute === 'function') {
@@ -164,7 +227,13 @@ async function findRoute() {
                     getRoute([`${p1[0]},${p1[1]}`, `${p2[0]},${p2[1]}`]);
                 }
             } else {
-                map.flyTo({ center: [match.lon, match.lat], zoom: 18 });
+                if (matches.length === 1) {
+                    map.flyTo({ center: [match.lon, match.lat], zoom: 18 });
+                } else {
+                    const bounds = new maplibregl.LngLatBounds();
+                    matches.forEach(m => bounds.extend([m.lon, m.lat]));
+                    map.fitBounds(bounds, { padding: 50 });
+                }
             }
         }
     } else {
@@ -188,3 +257,76 @@ window.addEventListener('load', () => {
         }
     }
 });
+
+// ── Building click handlers (called from index.html on map load) ──
+
+// Helper: fill destination input with the building name when "Go here" is clicked
+function goToBuilding(buildingNumber) {
+    if (!buildingsData) return;
+    const b = buildingsData.find(item => item.number === buildingNumber);
+    if (b) {
+        const destInput = document.getElementById('destination');
+        if (destInput) {
+            destInput.value = b.name_ch || b.name;
+            findRoute();
+        }
+    }
+}
+
+function initBuildingClickHandlers(map) {
+    // Flag: when a 3D building is clicked, skip the generic popup
+    let buildingClicked = false;
+
+    // Generic click — show lat/lng (unless a building was just clicked)
+    map.on('click', (e) => {
+        if (buildingClicked) {
+            buildingClicked = false;
+            return;
+        }
+        const { lng, lat } = e.lngLat;
+        console.log(`Location Coordinates: Lng: ${lng}, Lat: ${lat}`);
+
+        new maplibregl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(`Lat: ${lat.toFixed(5)}<br>Lng: ${lng.toFixed(5)}`)
+            .addTo(map);
+    });
+
+    // Click on a 3D building → show name / name_ch / code_id from data.json
+    map.on('click', '3d-buildings', async (e) => {
+        buildingClicked = true;
+        const clickedLng = e.lngLat.lng;
+        const clickedLat = e.lngLat.lat;
+
+        const buildings = await getBuildings();
+        let closest = null;
+        let minDist = Infinity;
+
+        for (const b of buildings) {
+            const dist = Math.sqrt(
+                Math.pow(b.lat - clickedLat, 2) +
+                Math.pow(b.lon - clickedLng, 2)
+            );
+            if (dist < minDist) {
+                minDist = dist;
+                closest = b;
+            }
+        }
+
+        // ~0.00025 degrees ≈ roughly 25 m — only match nearby buildings
+        if (closest && minDist < 0.00025) {
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(
+                    `<strong>${closest.name}</strong><br>` +
+                    `${closest.name_ch}<br>` +
+                    `Code: ${closest.code_id || 'N/A'}<br>` +
+                    `<button onclick="goToBuilding('${closest.number}')">Go here</button>`
+                )
+                .addTo(map);
+        } else {
+            // Clicked a 3D building not in data.json — fall through to generic popup
+            buildingClicked = false;
+        }
+    });
+}

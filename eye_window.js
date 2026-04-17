@@ -175,23 +175,20 @@ function dragElement(elmnt) {
 
     if (header) {
         header.style.cursor = "move";
+        // Mouse events
         header.onmousedown = dragMouseDown;
+        // Touch events
+        header.addEventListener("touchstart", dragTouchStart, { passive: false });
     } else {
         elmnt.onmousedown = dragMouseDown;
+        elmnt.addEventListener("touchstart", dragTouchStart, { passive: false });
     }
 
+    // -- Mouse Logic --
     function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
-
-        // Convert CSS transform-centering to real pixel top/left so drag math works
-        const rect = elmnt.getBoundingClientRect();
-        elmnt.style.top       = rect.top  + "px";
-        elmnt.style.left      = rect.left + "px";
-        elmnt.style.transform = "none"; // disable the translate(-50%,-50%) centering
-
-        pos3 = e.clientX;
-        pos4 = e.clientY;
+        initDragPos(e.clientX, e.clientY);
         document.onmouseup   = closeDragElement;
         document.onmousemove = elementDrag;
     }
@@ -199,16 +196,52 @@ function dragElement(elmnt) {
     function elementDrag(e) {
         e = e || window.event;
         e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        elmnt.style.top  = (elmnt.offsetTop  - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        calculateAndMove(e.clientX, e.clientY);
     }
 
     function closeDragElement() {
         document.onmouseup   = null;
         document.onmousemove = null;
+    }
+
+    // -- Touch Logic --
+    function dragTouchStart(e) {
+        // e.preventDefault(); // Don't prevent default blindly; it might block legitimate clicks inside, but we need it on the header specifically. 
+        if (e.target === header || header.contains(e.target)) {
+            // we only care if it's strictly the header area dragging
+        }
+        initDragPos(e.touches[0].clientX, e.touches[0].clientY);
+        document.addEventListener("touchend", closeTouchDragElement);
+        document.addEventListener("touchmove", touchDrag, { passive: false });
+    }
+
+    function touchDrag(e) {
+        e.preventDefault(); // crucial on mobile to prevent page scrolling while dragging window
+        calculateAndMove(e.touches[0].clientX, e.touches[0].clientY);
+    }
+
+    function closeTouchDragElement() {
+        document.removeEventListener("touchend", closeTouchDragElement);
+        document.removeEventListener("touchmove", touchDrag);
+    }
+
+    // -- Shared Math --
+    function initDragPos(clientX, clientY) {
+        const rect = elmnt.getBoundingClientRect();
+        elmnt.style.top       = rect.top  + "px";
+        elmnt.style.left      = rect.left + "px";
+        elmnt.style.transform = "none"; // disable the translate(-50%,-50%) centering
+
+        pos3 = clientX;
+        pos4 = clientY;
+    }
+
+    function calculateAndMove(clientX, clientY) {
+        pos1 = pos3 - clientX;
+        pos2 = pos4 - clientY;
+        pos3 = clientX;
+        pos4 = clientY;
+        elmnt.style.top  = (elmnt.offsetTop  - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }
 }

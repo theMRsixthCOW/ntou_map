@@ -18,8 +18,16 @@
 }
 
 @keyframes blink {
-    0%, 96%, 100% { transform: scaleY(1); }
-    98%           { transform: scaleY(0.1); }
+
+    0%,
+    96%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    98% {
+        transform: scaleY(0.1);
+    }
 }
 
 
@@ -37,7 +45,8 @@
     opacity: 0.6;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.2s;
-    transform: translateZ(0);           /* GPU layer for mobile */
+    transform: translateZ(0);
+    /* GPU layer for mobile */
     -webkit-transform: translateZ(0);
 }
 
@@ -61,25 +70,39 @@
    ============================================= */
 
 .report-window {
-    display: none;           /* toggled by JS */
+    display: none;
+    /* toggled by JS */
     flex-direction: column;
-    position: fixed;         /* fixed so drag (offsetTop/Left) works correctly */
+    position: fixed;
+    /* fixed so drag (offsetTop/Left) works correctly */
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);   /* initial centering; cleared on first drag */
+    transform: translate(-50%, -50%);
+    /* initial centering; cleared on first drag */
     width: 360px;
     max-width: calc(100vw - 24px);
     max-height: calc(100vh - 80px);
     background: #111;
     border: 1px solid #333;
-    border-radius: 14px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    box-shadow: none;
     z-index: 1000;
     font-family: 'Courier New', monospace;
     color: #c9d1d9;
 }
 
+@media (max-width: 600px) {
+    .report-window {
+        width: 300px;
+        max-width: calc(100vw - 10px);
+    }
+
+    .report-window-body {
+        padding: 10px;
+        gap: 8px;
+    }
+}
 
 /* --- Header (drag handle) --- */
 
@@ -90,7 +113,8 @@
     padding: 10px 14px;
     background: #1a1a2e;
     border-bottom: 1px solid #333;
-    cursor: move;             /* set via JS too, but CSS gives instant feedback */
+    cursor: move;
+    /* set via JS too, but CSS gives instant feedback */
     user-select: none;
     -webkit-user-select: none;
 }
@@ -110,6 +134,7 @@
     opacity: 0.5;
 
 }
+
 @media (max-width: 600px) {
     .report-close-btn {
         width: 24px;
@@ -191,14 +216,13 @@
     background: #2a2a3e;
     border-color: #c2c2c2;
     color: #ffffff;
-    transform: translateX(4px);
 }
-
 
 /* --- Message input area --- */
 
 .report-input-area {
-    display: none;          /* shown by JS */
+    display: none;
+    /* shown by JS */
     flex-direction: column;
     gap: 8px;
     width: 100%;
@@ -262,5 +286,4 @@
 
 .report-send-btn:hover {
     background: #81d4fa;
-    transform: translateY(-1px);
 }

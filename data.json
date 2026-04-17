@@ -364,7 +364,7 @@
     "number": "41",
     "name": "Maritime Building C",
     "name_ch": "海事大樓丙棟",
-    "code_id": "MC",
+    "code_id": "MAF",
     "location_code": "H2",
     "lat": 25.14943,
     "lon": 121.77400
@@ -629,5 +629,19 @@
     "location_code": "A2",
     "lat": 25.15016,
     "lon": 121.78276
+  },
+  {
+    "number": "71",
+    "name":"7-11",
+    "name_ch":"7-11便利店",
+    "lat": 25.14895,
+    "lon": 121.77515
+  },
+  {
+    "number": "72",
+    "name":"7-11",
+    "name_ch":"7-11便利店",
+    "lat": 25.14895,
+    "lon": 121.77837
   }
 ]

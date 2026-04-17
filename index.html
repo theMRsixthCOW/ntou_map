@@ -19,7 +19,7 @@
 </head>
 <body>
 <div id="map"></div>
-<!--             maybe this is me        這只是一個工具 因爲我很討厭記建築物編號 什麽INS 什麽OPE                                      
+<!--            hello        這只是一個工具 因爲我很討厭記建築物編號 什麽INS 什麽OPE                                      
                                          :+*###**#+:                                    
                                       +@@@@@@@@@@@@@%#:                                 
                                     #@@@@@@@%#%%%%%%%%%%*                               
@@ -73,37 +73,10 @@ map.on('load', () => {
             'fill-extrusion-opacity': 0.6
         }
     });
-});
 
-map.on('click', (e) => {//爲了看到lat 和long ， 暫時加這段code（2026-3-13）
-                         // e.lngLat contains the longitude and latitude of the point clicked
-  const { lng, lat } = e.lngLat;
-  
-  console.log(`Building/Location Coordinates:`);
-  console.log(`Longitude: ${lng}`);
-  console.log(`Latitude: ${lat}`);
-  
-                         // Optional: Create a popup to show it on the map too
-                         // this popup is what i want , willl use it a low
-  new maplibregl.Popup()
-    .setLngLat(e.lngLat)
-    .setHTML(`Lat: ${lat.toFixed(5)}<br>Lng: ${lng.toFixed(5)}`)
-    .addTo(map);
-});
-
-
-//    "Building-to-Building"
-let waypoints = [];
-
-map.on('click', '3d-buildings', (e) => {
-    const coords = e.lngLat;
-    waypoints.push(`${coords.lng},${coords.lat}`);
-    
-    console.log("Added building to route:", coords);
-
-    if (waypoints.length >= 2) {
-        getRoute(waypoints);
-    }
+    // Pre-load buildings data and set up click handlers
+    getBuildings();
+    initBuildingClickHandlers(map);
 });
 
 
@@ -121,17 +94,36 @@ async function getRoute(points) {
             return;
         }
         const route = data.routes[0].geometry;
+        const distance = Math.round(data.routes[0].distance);
 
         // Update or add the route line to the map
         if (map.getSource('route')) {
             map.getSource('route').setData(route);
+            if (map.getLayer('route-distance')) {
+                map.setLayoutProperty('route-distance', 'text-field', `${distance} m`);
+            }
         } else {
             map.addSource('route', { type: 'geojson', data: route });
             map.addLayer({
                 id: 'route-line',
                 type: 'line',
                 source: 'route',
-                paint: { 'line-color': '#3887be', 'line-width': 5 }
+                paint: { 'line-color': '#3887be', 'line-width': 9 }
+            });
+            map.addLayer({
+                id: 'route-distance',
+                type: 'symbol',
+                source: 'route',
+                layout: {
+                    'symbol-placement': 'line-center',
+                    'text-field': `${distance} m`,
+                    'text-size': 14
+                },
+                paint: {
+                    'text-color': '#000',
+                    'text-halo-color': '#fff',
+                    'text-halo-width': 3
+                }
             });
         }
     } catch (e) {
@@ -142,6 +134,7 @@ async function getRoute(points) {
 </script>
 <div class="search-container inputbar">
   <input type="search" id="fname" placeholder=" ADM or 行政大樓 or 1（地圖上的編號）" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
+  <button class="locate-btn" onclick="locateUser()" title="定位我的位置"><img src="icons/target.png" alt="locate me"></button>
   <button onclick="findBuilding()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
 </div>
 <div class="search-container inputbar2">
