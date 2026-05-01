@@ -55,15 +55,19 @@ textarea,
 /* Smooth Chyron Placeholder */
 .placeholder-wrapper {
     position: absolute;
-    left: 8px; /* Matches input padding */
+    left: 8px;
+    /* Matches input padding */
     top: 0;
     bottom: 0;
-    width: calc(100% - 70px); /* Leaves space for the buttons on the right */
+    width: calc(100% - 70px);
+    /* Leaves space for the buttons on the right */
     overflow: hidden;
-    pointer-events: none; /* Let clicks pass through to the input */
+    pointer-events: none;
+    /* Let clicks pass through to the input */
     display: flex;
     align-items: center;
-    color: #757575; /* Standard placeholder gray */
+    color: #757575;
+    /* Standard placeholder gray */
     font-size: 14px;
     font-family: inherit;
     transition: opacity 0.2s, visibility 0.2s;
@@ -74,22 +78,28 @@ textarea,
     display: flex;
     white-space: nowrap;
     animation: smooth-marquee 6s linear infinite;
-    will-change: transform; /* Hardware acceleration */
+    will-change: transform;
+    /* Hardware acceleration */
 }
 
 .marquee-content span {
-    padding-right: 30px; /* Space between the loops */
+    padding-right: 30px;
+    /* Space between the loops */
 }
 
 @keyframes smooth-marquee {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 @media (max-width: 500px) {
     .search-container {
         width: calc(100% - 110px);
-        font-size: 50%;
     }
 
     .maplibregl-popup-content {
