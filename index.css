@@ -1,3 +1,12 @@
+html,
+body,
+button,
+input,
+textarea,
+.report-window-icon {
+    touch-action: manipulation;
+}
+
 .search-container {
     position: absolute;
     left: 10px;
@@ -9,6 +18,8 @@
     box-sizing: border-box;
     align-items: center;
     padding-right: 5px;
+    border-radius: 5px;
+    touch-action: manipulation;
 }
 
 .search-container input {
@@ -16,6 +27,7 @@
     padding: 8px;
     width: 100%;
     outline: none;
+    border-radius: 5px;
 }
 
 .search-container button {
@@ -40,9 +52,53 @@
     top: 50px;
 }
 
+/* Smooth Chyron Placeholder */
+.placeholder-wrapper {
+    position: absolute;
+    left: 8px; /* Matches input padding */
+    top: 0;
+    bottom: 0;
+    width: calc(100% - 70px); /* Leaves space for the buttons on the right */
+    overflow: hidden;
+    pointer-events: none; /* Let clicks pass through to the input */
+    display: flex;
+    align-items: center;
+    color: #757575; /* Standard placeholder gray */
+    font-size: 14px;
+    font-family: inherit;
+    transition: opacity 0.2s, visibility 0.2s;
+    background-color: transparent;
+}
+
+.marquee-content {
+    display: flex;
+    white-space: nowrap;
+    animation: smooth-marquee 6s linear infinite;
+    will-change: transform; /* Hardware acceleration */
+}
+
+.marquee-content span {
+    padding-right: 30px; /* Space between the loops */
+}
+
+@keyframes smooth-marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
 @media (max-width: 500px) {
     .search-container {
         width: calc(100% - 110px);
+        font-size: 50%;
+    }
 
+    .maplibregl-popup-content {
+        padding: 10px 15px 5px 10px !important;
+        line-height: 1.3 !important;
+    }
+
+    .maplibregl-popup-content button {
+        margin-top: 3px;
+        padding: 4px 8px;
     }
 }

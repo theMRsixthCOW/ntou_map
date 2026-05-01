@@ -4,7 +4,7 @@
   <title>NTOU-3D-MAP</title>
   <meta property="og:description" content="海洋大學的3D地圖啊 w(ﾟДﾟ)w ， 輸入ID或名稱就能找到建築物，還能規劃路線。作者很健忘不記得學務処在哪裏。有comment請用内建的“聯絡我們”匿名投稿（不用害羞，只用了json所以根本看不到是誰發的）。未來會有-逃生路綫-和-增加下雨的功能" />
   <meta charset='utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.19.0/dist/maplibre-gl.css' />
   <script src='https://unpkg.com/maplibre-gl@5.19.0/dist/maplibre-gl.js'></script>
   <script src="find.js"></script>
@@ -49,10 +49,16 @@
 
 -->
 <script>
+const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+// Zooming out by 30% scale means multiplying by ~0.7. 
+// Since 2^(-0.5) is approx 0.7, subtracting 0.5 from zoom level (17 -> 16.5) achieves this.
+const minZoomLimit = isMobile ? 16.0 : 0;
+
 const map = new maplibregl.Map({
     style: `https://tiles.openfreemap.org/styles/bright`,//找中間
     center: [121.77559, 25.14939],               // Fixed: [lng, lat]
     zoom: 17,
+    minZoom: minZoomLimit,
     pitch: 45,
     bearing: 45,
     container: 'map',
@@ -131,9 +137,16 @@ async function getRoute(points) {
     }
 }
 
+
 </script>
 <div class="search-container inputbar">
-  <input type="search" id="fname" placeholder=" ADM or 行政大樓 or 1（地圖上的編號）" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
+  <div id="fname-placeholder-wrapper" class="placeholder-wrapper">
+    <div class="marquee-content">
+      <span> ADM or 行政大樓 or 1（地圖上的編號） </span>
+      <span> ADM or 行政大樓 or 1（地圖上的編號） </span>
+    </div>
+  </div>
+  <input type="search" id="fname" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
   <button class="locate-btn" onclick="locateUser()" title="定位我的位置"><img src="icons/target.png" alt="locate me"></button>
   <button onclick="findBuilding()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
 </div>

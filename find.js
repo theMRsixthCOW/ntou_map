@@ -15,8 +15,9 @@ async function getBuildings() {
 
 // ── Locate User via Geolocation API (Plain logic for mobile) ──
 function locateUser() {
+    // 1. Check if geolocation is supported (and if we are in a secure context like HTTPS)
     if (!navigator.geolocation) {
-        alert('您的瀏覽器不支援定位功能 (Geolocation not supported)');
+        alert('您的瀏覽器不支援定位功能，或者您當前未使用 HTTPS 連線 (Geolocation not supported or not on HTTPS)');
         return;
     }
 
@@ -26,7 +27,11 @@ function locateUser() {
             const lng = position.coords.longitude;
 
             const fnameInput = document.getElementById('fname');
-            if (fnameInput) fnameInput.value = '我的位置';
+            if (fnameInput) {
+                fnameInput.value = '我的位置';
+                // Trigger input event to ensure the smooth Chyron placeholder hides
+                fnameInput.dispatchEvent(new Event('input'));
+            }
 
             document.getElementById('lat-input').value = lat;
             document.getElementById('lng-input').value = lng;
@@ -39,7 +44,12 @@ function locateUser() {
             }
         },
         (error) => {
-            alert('定位失敗 (Location error)');
+            // Provide detailed error feedback
+            let errorMsg = '定位失敗 (Location error)';
+            if (error.code === 1) errorMsg = '定位失敗：請允許瀏覽器存取您的位置權限 (Permission denied)';
+            if (error.code === 2) errorMsg = '定位失敗：無法獲取位置資訊，請確認手機 GPS 已開啟 (Position unavailable)';
+            if (error.code === 3) errorMsg = '定位失敗：獲取位置超時 (Timeout)';
+            alert(errorMsg);
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
@@ -330,3 +340,27 @@ function initBuildingClickHandlers(map) {
         }
     });
 }
+
+// ── Smooth Chyron Placeholder Visibility ──
+document.addEventListener('DOMContentLoaded', () => {
+    const fnameInput = document.getElementById('fname');
+    const placeholderWrapper = document.getElementById('fname-placeholder-wrapper');
+    
+    if (fnameInput && placeholderWrapper) {
+        // Toggle visibility based on input content
+        const togglePlaceholder = () => {
+            if (fnameInput.value === '') {
+                placeholderWrapper.style.opacity = '1';
+                placeholderWrapper.style.visibility = 'visible';
+            } else {
+                placeholderWrapper.style.opacity = '0';
+                placeholderWrapper.style.visibility = 'hidden';
+            }
+        };
+
+        // Listen for typing or value changes
+        fnameInput.addEventListener('input', togglePlaceholder);
+        // Ensure correct state on load
+        togglePlaceholder();
+    }
+});
