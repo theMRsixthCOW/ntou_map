@@ -1,4 +1,5 @@
 let buildingsData = null;
+let professorsData = null;
 
 async function getBuildings() {
     if (!buildingsData) {
@@ -13,6 +14,19 @@ async function getBuildings() {
     return buildingsData;
 }
 
+async function getProfessors() {
+    if (!professorsData) {
+        try {
+            const res = await fetch('professors.json');
+            professorsData = await res.json();
+        } catch (e) {
+            console.error("Error loading professors data:", e);
+            professorsData = [];
+        }
+    }
+    return professorsData;
+}
+
 // ── Locate User via Geolocation API (Plain logic for mobile) ──
 function locateUser() {
     // 1. Check if geolocation is supported (and if we are in a secure context like HTTPS)
@@ -21,37 +35,54 @@ function locateUser() {
         return;
     }
 
+    const handleSuccess = (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        const fnameInput = document.getElementById('fname');
+        if (fnameInput) {
+            fnameInput.value = '我的位置';
+            // Trigger input event to ensure the smooth Chyron placeholder hides
+            fnameInput.dispatchEvent(new Event('input'));
+        }
+
+        document.getElementById('lat-input').value = lat;
+        document.getElementById('lng-input').value = lng;
+
+        if (typeof map !== 'undefined') {
+            map.flyTo({ center: [lng, lat], zoom: 17 });
+            new maplibregl.Marker()
+                .setLngLat([lng, lat])
+                .addTo(map);
+        }
+    };
+
+    const handleError = (error) => {
+        // Provide detailed error feedback
+        let errorMsg = '定位失敗 (Location error)';
+        if (error.code === 1) errorMsg = '定位失敗：請允許瀏覽器存取您的位置權限 (Permission denied)\\n(如果是 iOS，請至 設定 > Safari > 位置，改為「允許」)';
+        if (error.code === 2) errorMsg = '定位失敗：無法獲取位置資訊，請確認手機 GPS 已開啟 (Position unavailable)';
+        if (error.code === 3) errorMsg = '定位失敗：獲取位置超時 (Timeout)';
+        alert(errorMsg);
+    };
+
+    // iOS Safari often fails/times out with high accuracy indoors.
+    // Try high accuracy first, fallback to low accuracy if it fails.
     navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            const fnameInput = document.getElementById('fname');
-            if (fnameInput) {
-                fnameInput.value = '我的位置';
-                // Trigger input event to ensure the smooth Chyron placeholder hides
-                fnameInput.dispatchEvent(new Event('input'));
-            }
-
-            document.getElementById('lat-input').value = lat;
-            document.getElementById('lng-input').value = lng;
-
-            if (typeof map !== 'undefined') {
-                map.flyTo({ center: [lng, lat], zoom: 17 });
-                new maplibregl.Marker()
-                    .setLngLat([lng, lat])
-                    .addTo(map);
-            }
-        },
+        handleSuccess,
         (error) => {
-            // Provide detailed error feedback
-            let errorMsg = '定位失敗 (Location error)';
-            if (error.code === 1) errorMsg = '定位失敗：請允許瀏覽器存取您的位置權限 (Permission denied)';
-            if (error.code === 2) errorMsg = '定位失敗：無法獲取位置資訊，請確認手機 GPS 已開啟 (Position unavailable)';
-            if (error.code === 3) errorMsg = '定位失敗：獲取位置超時 (Timeout)';
-            alert(errorMsg);
+            if (error.code === 2 || error.code === 3) {
+                console.warn("High accuracy geolocation failed. Falling back to low accuracy...");
+                navigator.geolocation.getCurrentPosition(
+                    handleSuccess,
+                    handleError,
+                    { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+                );
+            } else {
+                handleError(error);
+            }
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
     );
 }
 
@@ -70,8 +101,41 @@ function calculateSimilarity(str1, str2) {
 
 async function findSimilarBuilding(query) {
     const buildings = await getBuildings();
+    const professors = await getProfessors();
     let bestMatches = [];
     let maxScore = -1;
+
+    // Search for professors first
+    let bestProfMatch = null;
+    let profMaxScore = -1;
+
+    for (const p of professors) {
+        const score = calculateSimilarity(p.name, query);
+        if (score > profMaxScore && score > 0) {
+            profMaxScore = score;
+            bestProfMatch = p;
+        }
+    }
+
+    if (bestProfMatch && profMaxScore >= 80) {
+        const bldgCode = (bestProfMatch.office || '').split(' ')[0];
+        if (bldgCode) {
+            // Find building that matches the code exactly
+            for (const b of buildings) {
+                if (b.code_id && b.code_id.toLowerCase() === bldgCode.toLowerCase()) {
+                    const bMatch = { ...b, professorMatched: bestProfMatch };
+                    return [bMatch];
+                }
+            }
+            // Also try matching against name or name_ch if code_id didn't match directly
+            for (const b of buildings) {
+                if (calculateSimilarity(b.name, bldgCode) >= 80 || calculateSimilarity(b.name_ch, bldgCode) >= 80) {
+                    const bMatch = { ...b, professorMatched: bestProfMatch };
+                    return [bMatch];
+                }
+            }
+        }
+    }
 
     // Fields to compare: "number" or "name" or "name_ch" or "code_id" or "location_code"
     for (const b of buildings) {
@@ -142,9 +206,13 @@ async function findBuilding(updateUrl = true) {
             }
             
             matches.forEach(m => {
+                let popupHtml = `<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`;
+                if (m.professorMatched) {
+                    popupHtml += `<br><br><strong>教授 (Professor): ${m.professorMatched.name}</strong><br>辦公室 (Office): ${m.professorMatched.office}`;
+                }
                 new maplibregl.Popup()
                     .setLngLat([m.lon, m.lat])
-                    .setHTML(`<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`)
+                    .setHTML(popupHtml)
                     .addTo(map);
             });
         }
@@ -202,9 +270,13 @@ async function findRoute() {
 
         if (typeof map !== 'undefined') {
             matches.forEach(m => {
+                let popupHtml = `<strong>目的地 (Destination)</strong><br>${m.name_ch}<br>${m.name}`;
+                if (m.professorMatched) {
+                    popupHtml += `<br><br><strong>教授 (Professor): ${m.professorMatched.name}</strong><br>辦公室 (Office): ${m.professorMatched.office}`;
+                }
                 new maplibregl.Popup()
                     .setLngLat([m.lon, m.lat])
-                    .setHTML(`<strong>目的地 (Destination)</strong><br>${m.name_ch}<br>${m.name}`)
+                    .setHTML(popupHtml)
                     .addTo(map);
             });
             
@@ -215,9 +287,13 @@ async function findRoute() {
                     const startMatches = await findSimilarBuilding(fnameQuery);
                     if (startMatches && startMatches.length > 0) {
                         startMatches.forEach(m => {
+                            let popupHtml = `<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`;
+                            if (m.professorMatched) {
+                                popupHtml += `<br><br><strong>教授 (Professor): ${m.professorMatched.name}</strong><br>辦公室 (Office): ${m.professorMatched.office}`;
+                            }
                             new maplibregl.Popup()
                                 .setLngLat([m.lon, m.lat])
-                                .setHTML(`<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`)
+                                .setHTML(popupHtml)
                                 .addTo(map);
                         });
                     }
@@ -283,6 +359,20 @@ function goToBuilding(buildingNumber) {
     }
 }
 
+// Helper: fill start input with the building name when "Start here" is clicked
+function startAtBuilding(buildingNumber) {
+    if (!buildingsData) return;
+    const b = buildingsData.find(item => item.number === buildingNumber);
+    if (b) {
+        const fnameInput = document.getElementById('fname');
+        if (fnameInput) {
+            fnameInput.value = b.name_ch || b.name;
+            fnameInput.dispatchEvent(new Event('input')); // Hide chyron
+            findBuilding();
+        }
+    }
+}
+
 function initBuildingClickHandlers(map) {
     // Flag: when a 3D building is clicked, skip the generic popup
     let buildingClicked = false;
@@ -331,6 +421,7 @@ function initBuildingClickHandlers(map) {
                     `<strong>${closest.name}</strong><br>` +
                     `${closest.name_ch}<br>` +
                     `Code: ${closest.code_id || 'N/A'}<br>` +
+                    `<button onclick="startAtBuilding('${closest.number}')">Start here</button> ` +
                     `<button onclick="goToBuilding('${closest.number}')">Go here</button>`
                 )
                 .addTo(map);
