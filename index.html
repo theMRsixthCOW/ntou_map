@@ -89,7 +89,8 @@ map.on('load', () => {
 //        Fetch the OSM Route
 async function getRoute(points) {
     const query = points.join(';');
-    const url = `https://router.project-osrm.org/route/v1/foot/${query}?geometries=geojson&overview=full`;
+    // Use FOSSGIS foot routing which specifically favors tiny walking paths and footways on campus
+    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/driving/${query}?geometries=geojson&overview=full`;
     
     try {
         const response = await fetch(url);

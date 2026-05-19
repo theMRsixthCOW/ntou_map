@@ -301,7 +301,7 @@
     "number": "34",
     "name": "Humanities Building",
     "name_ch": "人文大樓",
-    "code_id": "HUM",
+    "code_id": "BOH",
     "location_code": "G2",
     "lat": 25.1498092,
     "lon": 121.7750395
@@ -436,7 +436,7 @@
     "number": "49",
     "name": "Environmental Biology & Fisheries Science Building",
     "name_ch": "環漁系館",
-    "code_id": "EBFS",
+    "code_id": "GF",
     "location_code": "I2",
     "lat": 25.14966,
     "lon": 121.77227

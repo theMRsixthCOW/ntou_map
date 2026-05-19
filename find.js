@@ -157,9 +157,181 @@ async function findSimilarBuilding(query) {
     return bestMatches;
 }
 
+// --- Point-in-polygon helper functions ---
+function isPointInPolygon(point, polygon) {
+    const x = point[0], y = point[1];
+    let inside = false;
+    const ring = polygon[0]; // Outer ring
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const xi = ring[i][0], yi = ring[i][1];
+        const xj = ring[j][0], yj = ring[j][1];
+        
+        const intersect = ((yi > y) !== (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
+
+function getBuildingFeatureFromPoint(lng, lat) {
+    const features = map.queryRenderedFeatures({ layers: ['3d-buildings'] });
+    let closestFeature = null;
+    let closestPolygon = null;
+    let minDistance = Infinity;
+    const point = [lng, lat];
+
+    for (const f of features) {
+        if (!f.geometry) continue;
+        
+        let polygons = [];
+        if (f.geometry.type === 'Polygon') {
+            polygons.push(f.geometry.coordinates);
+        } else if (f.geometry.type === 'MultiPolygon') {
+            polygons = f.geometry.coordinates;
+        }
+        
+        for (const poly of polygons) {
+            if (isPointInPolygon(point, poly)) {
+                return { feature: f, polygon: { type: 'Polygon', coordinates: poly } };
+            }
+            
+            if (poly[0] && poly[0][0]) {
+                const firstPoint = poly[0][0];
+                const dist = Math.hypot(firstPoint[0] - point[0], firstPoint[1] - point[1]);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestFeature = f;
+                    closestPolygon = poly;
+                }
+            }
+        }
+    }
+    
+    if (closestFeature && closestPolygon) {
+        return { feature: closestFeature, polygon: { type: 'Polygon', coordinates: closestPolygon } };
+    }
+    return null;
+}
+
+// --- Highlight State Store ---
+window.highlightedFeaturesStore = {};
+
+// Ensure layer is initialized when the map loads
+let highlightRefreshAttached = false;
+
+if (typeof map !== 'undefined') {
+    if (map.isStyleLoaded()) {
+        initHighlightLayer();
+    } else {
+        map.on('style.load', initHighlightLayer);
+    }
+}
+
+function refreshHighlights() {
+    if (typeof map === 'undefined' || !map.isStyleLoaded()) return;
+    
+    let updated = false;
+    for (const key in window.highlightedFeaturesStore) {
+        const [lngStr, latStr] = key.split(',');
+        const lng = parseFloat(lngStr);
+        const lat = parseFloat(latStr);
+        
+        const match = getBuildingFeatureFromPoint(lng, lat);
+        if (match) {
+            window.highlightedFeaturesStore[key].geometry = match.polygon;
+            updated = true;
+        }
+    }
+    
+    if (updated && map.getSource('highlighted-buildings-source')) {
+        map.getSource('highlighted-buildings-source').setData({
+            type: 'FeatureCollection',
+            features: Object.values(window.highlightedFeaturesStore)
+        });
+    }
+}
+
+function initHighlightLayer() {
+    if (typeof map === 'undefined') return;
+    if (map.getSource('highlighted-buildings-source')) return;
+
+    map.addSource('highlighted-buildings-source', {
+        type: 'geojson',
+        data: {
+            type: 'FeatureCollection',
+            features: []
+        }
+    });
+
+    map.addLayer({
+        id: 'highlighted-buildings-layer',
+        type: 'fill-extrusion',
+        source: 'highlighted-buildings-source',
+        paint: {
+            'fill-extrusion-color': ['get', 'color'],
+            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-base': ['get', 'base_height'],
+            'fill-extrusion-opacity': 0.95
+        }
+    });
+    
+    if (!highlightRefreshAttached) {
+        map.on('moveend', refreshHighlights);
+        highlightRefreshAttached = true;
+    }
+}
+
+// --- Main Highlight & Clear APIs ---
+function clearHighlightedBuildings() {
+    window.highlightedFeaturesStore = {};
+    if (typeof map !== 'undefined' && map.getSource('highlighted-buildings-source')) {
+        map.getSource('highlighted-buildings-source').setData({
+            type: 'FeatureCollection',
+            features: []
+        });
+    }
+}
+
+function highlightBuildingAt(lng, lat, color = '#FFD700') {
+    if (typeof map === 'undefined') return;
+    
+    // Make sure overlay source/layer is initialized
+    initHighlightLayer();
+
+    // Wait for camera movement to end before querying features
+    map.once('moveend', () => {
+        setTimeout(() => {
+            const match = getBuildingFeatureFromPoint(lng, lat);
+            
+            if (match) {
+                const f = match.feature;
+                const targetPolygon = match.polygon;
+                
+                const key = `${lng.toFixed(6)},${lat.toFixed(6)}`;
+                window.highlightedFeaturesStore[key] = {
+                    type: 'Feature',
+                    properties: {
+                        color: color,
+                        height: (f.properties.render_height || 5) + 1, // Add +1 height to prevent flickering Z-fighting
+                        base_height: f.properties.render_min_height || 0
+                    },
+                    geometry: targetPolygon
+                };
+                
+                const geojson = {
+                    type: 'FeatureCollection',
+                    features: Object.values(window.highlightedFeaturesStore)
+                };
+                map.getSource('highlighted-buildings-source').setData(geojson);
+            }
+        }, 150);
+    });
+}
+
 async function findBuilding(updateUrl = true) {
 
     clearMapRoute();
+    clearHighlightedBuildings();
     // Clear any existing route from the map when searching for a new start building
     if (typeof clearMapRoute === 'function') clearMapRoute();
 
@@ -205,6 +377,8 @@ async function findBuilding(updateUrl = true) {
                 map.fitBounds(bounds, { padding: 50 });
             }
             
+            highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
+            
             matches.forEach(m => {
                 let popupHtml = `<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`;
                 if (m.professorMatched) {
@@ -243,8 +417,7 @@ function clearMapRoute() {
 }
 
 async function findRoute() {
-
-
+    clearMapRoute();
 
     const destInput = document.getElementById('destination');
     if (!destInput) return;
@@ -269,6 +442,9 @@ async function findRoute() {
         const startLng = document.getElementById('lng-input').value;
 
         if (typeof map !== 'undefined') {
+            clearHighlightedBuildings();
+            highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary destination building in Orange
+            
             matches.forEach(m => {
                 let popupHtml = `<strong>目的地 (Destination)</strong><br>${m.name_ch}<br>${m.name}`;
                 if (m.professorMatched) {
@@ -283,9 +459,12 @@ async function findRoute() {
             if (startLat && startLng) {
                 // Show start building popup if fname was filled in
                 const fnameQuery = document.getElementById('fname') ? document.getElementById('fname').value : '';
-                if (fnameQuery) {
+                if (fnameQuery && fnameQuery !== '我的位置') {
                     const startMatches = await findSimilarBuilding(fnameQuery);
                     if (startMatches && startMatches.length > 0) {
+                        const startMatch = startMatches[0];
+                        highlightBuildingAt(startMatch.lon, startMatch.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
+                        
                         startMatches.forEach(m => {
                             let popupHtml = `<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`;
                             if (m.professorMatched) {
