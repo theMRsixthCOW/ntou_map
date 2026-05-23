@@ -64,20 +64,28 @@ To enable the user reporting system, you must configure a Supabase project:
 
 ## Usage Guide
 
+Explore the interactive 3D campus directly by navigating to **[ntoumap.com](https://ntoumap.com)**.
+
 ### 1. Navigating the Map
 Click and drag to pan across the campus. Scroll to adjust the zoom level. The 3D buildings will render dynamically based on your viewport. Click on any building geometry to pull up its corresponding data label.
 
 <div align="center">
-  <!-- Note: Replace the placeholder URL with an actual screenshot of the map interface -->
-  <img src="https://via.placeholder.com/800x400?text=Map+Navigation+Screenshot" alt="Map Navigation Interface" width="100%" />
+  <img src="icons/usage_main.png" alt="Map Navigation Interface" width="100%" />
 </div>
 
-### 2. Finding a Route
-Use the search fields in the top console to input a starting location and a destination. The system's fuzzy search will automatically suggest matches from the database. Once confirmed, the routing engine calculates and animates the optimal path.
+### 2. Finding a Route and Locating Professors
+Use the search fields in the top console to input a starting location and a destination. The system's fuzzy search will automatically suggest matches from the database. 
+
+The application uses `professors.json` to allow you to search directly for a professor by name (e.g., "馬尚彬"). The map will instantly highlight the building where their office is located and display the exact room number (e.g., "ECG 804").
 
 <div align="center">
-  <!-- Note: Replace the placeholder URL with an actual screenshot of the routing interface -->
-  <img src="https://via.placeholder.com/800x400?text=Routing+and+Search+Screenshot" alt="Search and Routing Interface" width="100%" />
+  <img src="icons/usage_search.png" alt="Professor Search Results" width="100%" />
+</div>
+
+Once a starting location and destination (e.g., the professor's office or another building) are confirmed, the routing engine calculates a precise footpath, rendering it as a solid blue path on the map and outputting the travel distance.
+
+<div align="center">
+  <img src="icons/usage_route.png" alt="Search and Routing Interface" width="100%" />
 </div>
 
 ### 3. Submitting a Report
