@@ -31,7 +31,9 @@ async function getProfessors() {
 function locateUser() {
     // 1. Check if geolocation is supported (and if we are in a secure context like HTTPS)
     if (!navigator.geolocation) {
-        alert('您的瀏覽器不支援定位功能，或者您當前未使用 HTTPS 連線 (Geolocation not supported or not on HTTPS)');
+        alert(window.currentLang === 'en' 
+            ? 'Geolocation not supported or not on HTTPS' 
+            : '您的瀏覽器不支援定位功能，或者您當前未使用 HTTPS 連線 (Geolocation not supported or not on HTTPS)');
         return;
     }
 
@@ -41,7 +43,7 @@ function locateUser() {
 
         const fnameInput = document.getElementById('fname');
         if (fnameInput) {
-            fnameInput.value = '我的位置';
+            fnameInput.value = window.currentLang === 'en' ? 'My Location' : '我的位置';
             // Trigger input event to ensure the smooth Chyron placeholder hides
             fnameInput.dispatchEvent(new Event('input'));
         }
@@ -59,10 +61,16 @@ function locateUser() {
 
     const handleError = (error) => {
         // Provide detailed error feedback
-        let errorMsg = '定位失敗 (Location error)';
-        if (error.code === 1) errorMsg = '定位失敗：請允許瀏覽器存取您的位置權限 (Permission denied)\\n(如果是 iOS，請至 設定 > Safari > 位置，改為「允許」)';
-        if (error.code === 2) errorMsg = '定位失敗：無法獲取位置資訊，請確認手機 GPS 已開啟 (Position unavailable)';
-        if (error.code === 3) errorMsg = '定位失敗：獲取位置超時 (Timeout)';
+        let errorMsg = window.currentLang === 'en' ? 'Location error' : '定位失敗 (Location error)';
+        if (error.code === 1) errorMsg = window.currentLang === 'en' 
+            ? 'Permission denied. If on iOS, go to Settings > Safari > Location and allow.' 
+            : '定位失敗：請允許瀏覽器存取您的位置權限 (Permission denied)\\n(如果是 iOS，請至 設定 > Safari > 位置，改為「允許」)';
+        if (error.code === 2) errorMsg = window.currentLang === 'en' 
+            ? 'Position unavailable. Please ensure GPS is turned on.' 
+            : '定位失敗：無法獲取位置資訊，請確認手機 GPS 已開啟 (Position unavailable)';
+        if (error.code === 3) errorMsg = window.currentLang === 'en' 
+            ? 'Timeout while getting location.' 
+            : '定位失敗：獲取位置超時 (Timeout)';
         alert(errorMsg);
     };
 
@@ -380,9 +388,12 @@ async function findBuilding(updateUrl = true) {
             highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
             
             matches.forEach(m => {
-                let popupHtml = `<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`;
+                const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
+                let popupHtml = `<strong>${startLabel}</strong><br>${window.currentLang === 'en' ? m.name : m.name_ch}<br>${window.currentLang === 'en' ? m.name_ch : m.name}`;
                 if (m.professorMatched) {
-                    popupHtml += `<br><br><strong>教授 (Professor): ${m.professorMatched.name}</strong><br>辦公室 (Office): ${m.professorMatched.office}`;
+                    const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
+                    const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
+                    popupHtml += `<br><br><strong>${profLabel}: ${m.professorMatched.name}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
                 }
                 new maplibregl.Popup()
                     .setLngLat([m.lon, m.lat])
@@ -391,7 +402,7 @@ async function findBuilding(updateUrl = true) {
             });
         }
     } else {
-        alert("找不到相符的起點建築物 (Start building not found)");
+        alert(window.currentLang === 'en' ? "Start building not found" : "找不到相符的起點建築物 (Start building not found)");
     }
 }
 
@@ -446,9 +457,12 @@ async function findRoute() {
             highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary destination building in Orange
             
             matches.forEach(m => {
-                let popupHtml = `<strong>目的地 (Destination)</strong><br>${m.name_ch}<br>${m.name}`;
+                const destLabel = window.currentLang === 'en' ? 'Destination' : '目的地 (Destination)';
+                let popupHtml = `<strong>${destLabel}</strong><br>${window.currentLang === 'en' ? m.name : m.name_ch}<br>${window.currentLang === 'en' ? m.name_ch : m.name}`;
                 if (m.professorMatched) {
-                    popupHtml += `<br><br><strong>教授 (Professor): ${m.professorMatched.name}</strong><br>辦公室 (Office): ${m.professorMatched.office}`;
+                    const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
+                    const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
+                    popupHtml += `<br><br><strong>${profLabel}: ${m.professorMatched.name}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
                 }
                 new maplibregl.Popup()
                     .setLngLat([m.lon, m.lat])
@@ -459,16 +473,21 @@ async function findRoute() {
             if (startLat && startLng) {
                 // Show start building popup if fname was filled in
                 const fnameQuery = document.getElementById('fname') ? document.getElementById('fname').value : '';
-                if (fnameQuery && fnameQuery !== '我的位置') {
+                const myLocStrZh = '我的位置';
+                const myLocStrEn = 'My Location';
+                if (fnameQuery && fnameQuery !== myLocStrZh && fnameQuery !== myLocStrEn) {
                     const startMatches = await findSimilarBuilding(fnameQuery);
                     if (startMatches && startMatches.length > 0) {
                         const startMatch = startMatches[0];
                         highlightBuildingAt(startMatch.lon, startMatch.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
                         
                         startMatches.forEach(m => {
-                            let popupHtml = `<strong>起始地 (Start)</strong><br>${m.name_ch}<br>${m.name}`;
+                            const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
+                            let popupHtml = `<strong>${startLabel}</strong><br>${window.currentLang === 'en' ? m.name : m.name_ch}<br>${window.currentLang === 'en' ? m.name_ch : m.name}`;
                             if (m.professorMatched) {
-                                popupHtml += `<br><br><strong>教授 (Professor): ${m.professorMatched.name}</strong><br>辦公室 (Office): ${m.professorMatched.office}`;
+                                const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
+                                const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
+                                popupHtml += `<br><br><strong>${profLabel}: ${m.professorMatched.name}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
                             }
                             new maplibregl.Popup()
                                 .setLngLat([m.lon, m.lat])
@@ -502,7 +521,7 @@ async function findRoute() {
             }
         }
     } else {
-        alert("找不到相符的目的地建築物 (Destination building not found)");
+        alert(window.currentLang === 'en' ? "Destination building not found" : "找不到相符的目的地建築物 (Destination building not found)");
     }
 }
 
@@ -594,14 +613,16 @@ function initBuildingClickHandlers(map) {
 
         // ~0.00025 degrees ≈ roughly 25 m — only match nearby buildings
         if (closest && minDist < 0.00025) {
+            const startBtn = window.currentLang === 'en' ? 'Start here' : '從這裡開始';
+            const goBtn = window.currentLang === 'en' ? 'Go here' : '到這裡去';
             new maplibregl.Popup()
                 .setLngLat(e.lngLat)
                 .setHTML(
-                    `<strong>${closest.name}</strong><br>` +
-                    `${closest.name_ch}<br>` +
+                    `<strong>${window.currentLang === 'en' ? closest.name : closest.name_ch}</strong><br>` +
+                    `${window.currentLang === 'en' ? closest.name_ch : closest.name}<br>` +
                     `Code: ${closest.code_id || 'N/A'}<br>` +
-                    `<button onclick="startAtBuilding('${closest.number}')">Start here</button> ` +
-                    `<button onclick="goToBuilding('${closest.number}')">Go here</button>`
+                    `<button onclick="startAtBuilding('${closest.number}')">${startBtn}</button> ` +
+                    `<button onclick="goToBuilding('${closest.number}')">${goBtn}</button>`
                 )
                 .addTo(map);
         } else {
@@ -634,3 +655,164 @@ document.addEventListener('DOMContentLoaded', () => {
         togglePlaceholder();
     }
 });
+
+// ── Language Toggle & i18n ──
+window.currentLang = 'zh';
+
+const i18n = {
+    'ADM or 行政大樓 or 1（地圖上的編號）': {
+        en: 'ADM or Admin Bldg or 1 (Map ID)'
+    },
+    '目的地（例如：圖書館或教授名字）': {
+        en: 'Destination (e.g., Library or Professor Name)'
+    },
+    '聯絡我們': {
+        en: 'Contact Us'
+    },
+    '> 有什麼事嗎？': {
+        en: '> How can I help you?'
+    },
+    '> 請選擇類型：': {
+        en: '> Please select a topic:'
+    },
+    '回報錯誤 / 建議': {
+        en: 'Report Bug / Suggestion'
+    },
+    '我想改造建築物': {
+        en: 'I Want to Mod a Building'
+    },
+    '在這裡輸入你的訊息...': {
+        en: 'Enter your message here...'
+    },
+    '← 返回': {
+        en: '← Back'
+    },
+    '送出 ': {
+        en: 'Send '
+    }
+};
+
+function toggleLanguage() {
+    window.currentLang = window.currentLang === 'zh' ? 'en' : 'zh';
+    const langToggleBtn = document.getElementById('lang-toggle');
+    if (langToggleBtn) {
+        langToggleBtn.innerText = window.currentLang === 'zh' ? 'EN' : '中文';
+    }
+    updateStaticText();
+}
+
+function updateStaticText() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = window.currentLang === 'en' ? i18n[key].en : key;
+            } else {
+                el.innerText = window.currentLang === 'en' ? i18n[key].en : key;
+            }
+        }
+    });
+    
+    // Also update title attribute for report icon
+    const reportIcon = document.querySelector('.report-window-icon');
+    if (reportIcon) {
+        reportIcon.title = window.currentLang === 'en' ? i18n['聯絡我們'].en : '聯絡我們';
+    }
+}
+
+// ── Map Initialization & Route ──
+var map;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+    // Zooming out by 30% scale means multiplying by ~0.7. 
+    // Since 2^(-0.5) is approx 0.7, subtracting 0.5 from zoom level (17 -> 16.5) achieves this.
+    const minZoomLimit = isMobile ? 16.0 : 0;
+
+    map = new maplibregl.Map({
+        style: `https://tiles.openfreemap.org/styles/bright`,//找中間
+        center: [121.77559, 25.14939],               // Fixed: [lng, lat]
+        zoom: 17,
+        minZoom: minZoomLimit,
+        pitch: 45,
+        bearing: 45,
+        container: 'map',
+        antialias: true
+    });
+
+    map.on('load', () => {
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'openmaptiles', // OpenFreeMap uses 'openmaptiles' as the source ID in their 'bright' style
+            'source-layer': 'building',
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': ['get', 'render_height'],
+                'fill-extrusion-base': ['get', 'render_min_height'],
+                'fill-extrusion-opacity': 0.6
+            }
+        });
+
+        // Pre-load buildings data and set up click handlers
+        getBuildings();
+        initBuildingClickHandlers(map);
+        
+        // Ensure highlight layer gets initialized if it wasn't already
+        initHighlightLayer();
+    });
+});
+
+
+//        Fetch the OSM Route
+async function getRoute(points) {
+    const query = points.join(';');
+    // Use FOSSGIS foot routing which specifically favors tiny walking paths and footways on campus
+    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/driving/${query}?geometries=geojson&overview=full`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (!data.routes || data.routes.length === 0) {
+            console.error("No route found");
+            return;
+        }
+        const route = data.routes[0].geometry;
+        const distance = Math.round(data.routes[0].distance);
+
+        // Update or add the route line to the map
+        if (map.getSource('route')) {
+            map.getSource('route').setData(route);
+            if (map.getLayer('route-distance')) {
+                map.setLayoutProperty('route-distance', 'text-field', `${distance} m`);
+            }
+        } else {
+            map.addSource('route', { type: 'geojson', data: route });
+            map.addLayer({
+                id: 'route-line',
+                type: 'line',
+                source: 'route',
+                paint: { 'line-color': '#3887be', 'line-width': 9 }
+            });
+            map.addLayer({
+                id: 'route-distance',
+                type: 'symbol',
+                source: 'route',
+                layout: {
+                    'symbol-placement': 'line-center',
+                    'text-field': `${distance} m`,
+                    'text-size': 14
+                },
+                paint: {
+                    'text-color': '#000',
+                    'text-halo-color': '#fff',
+                    'text-halo-width': 3
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Failed to fetch route", e);
+    }
+}

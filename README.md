@@ -4,7 +4,7 @@
 
 <h1 align="center">NTOU 3D Campus Navigation System</h1>
 
-The NTOU 3D Campus Navigation System is a web-based mapping application built for the National Taiwan Ocean University. It renders the campus environment in 3D using Leaflet.js and OSM Buildings, based on OpenStreetMap data. The user interface features an industrial design language with monospaced typography and structured layouts.
+The NTOU 3D Campus Navigation System is a web-based mapping application built for the National Taiwan Ocean University. It renders the campus environment in 3D using MapLibre GL JS and OpenFreeMap, based on OpenStreetMap data. The user interface features an industrial design language with monospaced typography and structured layouts.
 
 ## Features
 
@@ -18,8 +18,9 @@ The NTOU 3D Campus Navigation System is a web-based mapping application built fo
 
 | Component | Technology | Description |
 | :--- | :--- | :--- |
-| Core Map Engine | Leaflet.js | Manages base map layers, tiles, and user interactions. |
-| 3D Rendering | OSM Buildings | Handles 2.5D geometry extrusion and perspective generation. |
+| Core Map Engine | MapLibre GL JS | Manages vector map layers, tiles, user interactions, and 3D rendering. |
+| Base Maps | OpenFreeMap | Provides vector tiles and base map styles. |
+| Route Engine | FOSSGIS | OpenStreetMap-based routing API. |
 | Metadata Storage | JSON | Local `data.json` containing building definitions and coordinates. |
 | Backend API | Supabase | Handles POST requests for the built-in report submission system. |
 
@@ -95,5 +96,6 @@ Ensure `data.json` is located in the root directory relative to `index.html`. Fo
 ## Data Sources and References
 
 - Base mapping and extrusion logic relies on OpenStreetMap data.
-- System rendering powered by [OSM Buildings API](https://osmbuildings.org/documentation/) and [Leaflet.js](https://leafletjs.com/reference.html).
+- System rendering powered by [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) and [OpenFreeMap](https://openfreemap.org/).
+- Routing powered by [FOSSGIS Routing Server](https://routing.openstreetmap.de/).
 - Building aliases and grid designations cross-referenced with the official NTOU physical campus map.

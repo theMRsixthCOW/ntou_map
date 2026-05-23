@@ -18,6 +18,7 @@
   </style>
 </head>
 <body>
+<button id="lang-toggle" onclick="toggleLanguage()" style="position: absolute; bottom: 30px; left: 10px; z-index: 1000; padding: 10px 15px; background: rgba(255,255,255,0.9); border-radius: 8px; cursor: pointer; border: 1px solid #ccc; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">EN</button>
 <div id="map"></div>
 <!--            hello        這只是一個工具 因爲我很討厭記建築物編號 什麽INS 什麽OPE                                      
                                          :+*###**#+:                                    
@@ -48,103 +49,11 @@
                      .=#@@@@@@@@@@@@@@@@@@@@:+@@@@@@@@@@@@@@@@@@@#:                      
 
 -->
-<script>
-const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
-// Zooming out by 30% scale means multiplying by ~0.7. 
-// Since 2^(-0.5) is approx 0.7, subtracting 0.5 from zoom level (17 -> 16.5) achieves this.
-const minZoomLimit = isMobile ? 16.0 : 0;
-
-const map = new maplibregl.Map({
-    style: `https://tiles.openfreemap.org/styles/bright`,//找中間
-    center: [121.77559, 25.14939],               // Fixed: [lng, lat]
-    zoom: 17,
-    minZoom: minZoomLimit,
-    pitch: 45,
-    bearing: 45,
-    container: 'map',
-    antialias: true
-});
-
-map.on('load', () => {
-    map.addLayer({
-        'id': '3d-buildings',
-        'source': 'openmaptiles', // OpenFreeMap uses 'openmaptiles' as the source ID in their 'bright' style
-        'source-layer': 'building',
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': ['get', 'render_height'],
-            'fill-extrusion-base': ['get', 'render_min_height'],
-            'fill-extrusion-opacity': 0.6
-        }
-    });
-
-    // Pre-load buildings data and set up click handlers
-    getBuildings();
-    initBuildingClickHandlers(map);
-});
-
-
-//        Fetch the OSM Route
-async function getRoute(points) {
-    const query = points.join(';');
-    // Use FOSSGIS foot routing which specifically favors tiny walking paths and footways on campus
-    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/driving/${query}?geometries=geojson&overview=full`;
-    
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (!data.routes || data.routes.length === 0) {
-            console.error("No route found");
-            return;
-        }
-        const route = data.routes[0].geometry;
-        const distance = Math.round(data.routes[0].distance);
-
-        // Update or add the route line to the map
-        if (map.getSource('route')) {
-            map.getSource('route').setData(route);
-            if (map.getLayer('route-distance')) {
-                map.setLayoutProperty('route-distance', 'text-field', `${distance} m`);
-            }
-        } else {
-            map.addSource('route', { type: 'geojson', data: route });
-            map.addLayer({
-                id: 'route-line',
-                type: 'line',
-                source: 'route',
-                paint: { 'line-color': '#3887be', 'line-width': 9 }
-            });
-            map.addLayer({
-                id: 'route-distance',
-                type: 'symbol',
-                source: 'route',
-                layout: {
-                    'symbol-placement': 'line-center',
-                    'text-field': `${distance} m`,
-                    'text-size': 14
-                },
-                paint: {
-                    'text-color': '#000',
-                    'text-halo-color': '#fff',
-                    'text-halo-width': 3
-                }
-            });
-        }
-    } catch (e) {
-        console.error("Failed to fetch route", e);
-    }
-}
-
-
-</script>
 <div class="search-container inputbar">
   <div id="fname-placeholder-wrapper" class="placeholder-wrapper">
     <div class="marquee-content">
-      <span> ADM or 行政大樓 or 1（地圖上的編號） </span>
-      <span> ADM or 行政大樓 or 1（地圖上的編號） </span>
+      <span data-i18n="ADM or 行政大樓 or 1（地圖上的編號）"> ADM or 行政大樓 or 1（地圖上的編號） </span>
+      <span data-i18n="ADM or 行政大樓 or 1（地圖上的編號）"> ADM or 行政大樓 or 1（地圖上的編號） </span>
     </div>
   </div>
   <input type="search" id="fname" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
@@ -152,7 +61,7 @@ async function getRoute(points) {
   <button onclick="findBuilding()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
 </div>
 <div class="search-container inputbar2">
-  <input type="search" id="destination" placeholder="目的地（例如：圖書館或教授名字）" onkeypress="if(event.key === 'Enter') { findRoute(); }">
+  <input type="search" id="destination" placeholder="目的地（例如：圖書館或教授名字）" data-i18n="目的地（例如：圖書館或教授名字）" onkeypress="if(event.key === 'Enter') { findRoute(); }">
   <button onclick="findRoute()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
 </div>
 
@@ -167,7 +76,7 @@ async function getRoute(points) {
 <!-- Report / Contact Window -->
 <div id="report-window" class="report-window">
   <div id="report-window-header" class="report-window-header">
-    <span class="report-window-title">聯絡我們</span>
+    <span class="report-window-title" data-i18n="聯絡我們">聯絡我們</span>
     <img src="https://cdn-icons-png.flaticon.com/128/9068/9068699.png" class="report-close-btn" onclick="closeReportWindow()" title="關閉">
   </div>
   <div class="report-window-body">
@@ -177,21 +86,21 @@ async function getRoute(points) {
       </div>
     </div>
     <div class="report-window-text">
-      <p id="reporttext001" class="report-window-text001">&gt; 有什麼事嗎？</p>
-      <p id="reporttext002" class="report-window-text002">&gt; 請選擇類型：</p>
+      <p id="reporttext001" class="report-window-text001" data-i18n="> 有什麼事嗎？">&gt; 有什麼事嗎？</p>
+      <p id="reporttext002" class="report-window-text002" data-i18n="> 請選擇類型：">&gt; 請選擇類型：</p>
     </div>
     <!-- Step 1: Topic selection buttons -->
     <div id="report-topic-buttons" class="report-topic-buttons">
-      <button class="report-topic-btn" onclick="selectTopic('聯絡我們')">聯絡我們</button>
-      <button class="report-topic-btn" onclick="selectTopic('回報錯誤or建議')">回報錯誤 / 建議</button>
-      <button class="report-topic-btn" onclick="selectTopic('我想要改造建築物')">我想改造建築物</button>
+      <button class="report-topic-btn" onclick="selectTopic('聯絡我們')" data-i18n="聯絡我們">聯絡我們</button>
+      <button class="report-topic-btn" onclick="selectTopic('回報錯誤or建議')" data-i18n="回報錯誤 / 建議">回報錯誤 / 建議</button>
+      <button class="report-topic-btn" onclick="selectTopic('我想要改造建築物')" data-i18n="我想改造建築物">我想改造建築物</button>
     </div>
     <!-- Step 2: Message input (hidden until topic is chosen) -->
     <div id="report-input-area" class="report-input-area" style="display:none;">
-      <textarea id="report-message" class="report-textarea" placeholder="在這裡輸入你的訊息..."></textarea>
+      <textarea id="report-message" class="report-textarea" placeholder="在這裡輸入你的訊息..." data-i18n="在這裡輸入你的訊息..."></textarea>
       <div class="report-actions">
-        <button class="report-back-btn" onclick="resetReport()">← 返回</button>
-        <button class="report-send-btn" onclick="submitReport()">送出 </button>
+        <button class="report-back-btn" onclick="resetReport()" data-i18n="← 返回">← 返回</button>
+        <button class="report-send-btn" onclick="submitReport()" data-i18n="送出 ">送出 </button>
       </div>
     </div>
   </div>

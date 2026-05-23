@@ -84,7 +84,15 @@ function selectTopic(topic) {
     currentTopic = topic;   // remember for submitReport()
 
     document.getElementById("report-topic-buttons").style.display = "none";
-    document.getElementById("reporttext001").textContent = "> " + topic;
+    
+    let displayTopic = topic;
+    if (window.currentLang === 'en') {
+        if (topic === '聯絡我們') displayTopic = 'Contact Us';
+        if (topic === '回報錯誤or建議') displayTopic = 'Report Bug / Suggestion';
+        if (topic === '我想要改造建築物') displayTopic = 'I Want to Mod a Building';
+    }
+
+    document.getElementById("reporttext001").textContent = "> " + displayTopic;
     document.getElementById("reporttext001").classList.add("report-topic-selected");
     document.getElementById("reporttext002").textContent = getTopicPrompt(topic);
     document.getElementById("report-input-area").style.display = "flex";
@@ -92,19 +100,19 @@ function selectTopic(topic) {
 }
 
 function getTopicPrompt(topic) {
-    if (topic === "聯絡我們")           return "> 請問你要告訴我們什麼？（請不要告我，這只是工具  ┌( ´_ゝ` )┐）";
-    if (topic === "回報錯誤or建議")     return "> 請描述錯誤或建議的內容：";
-    if (topic === "我想要改造建築物")   return "> 真的嗎？請提供聯絡方式，作者會盡量聯絡你（當然不會泄露你的資料，我也不知道要幹嘛）：";
-    return "> 請輸入你的訊息：";
+    if (topic === "聯絡我們")           return window.currentLang === 'en' ? "> What do you want to tell us? (Please don't sue me, this is just a tool ┌( ´_ゝ` )┐)" : "> 請問你要告訴我們什麼？（請不要告我，這只是工具  ┌( ´_ゝ` )┐）";
+    if (topic === "回報錯誤or建議")     return window.currentLang === 'en' ? "> Please describe the bug or suggestion:" : "> 請描述錯誤或建議的內容：";
+    if (topic === "我想要改造建築物")   return window.currentLang === 'en' ? "> Really? Please provide your contact info, the author will try to reach out:" : "> 真的嗎？請提供聯絡方式，作者會盡量聯絡你（當然不會泄露你的資料，我也不知道要幹嘛）：";
+    return window.currentLang === 'en' ? "> Please enter your message:" : "> 請輸入你的訊息：";
 }
 
 function resetReport() {
     // Go back to step 1
     document.getElementById("report-topic-buttons").style.display = "flex";
     document.getElementById("report-input-area").style.display = "none";
-    document.getElementById("reporttext001").textContent = "> 有什麼事嗎？";
+    document.getElementById("reporttext001").textContent = window.currentLang === 'en' ? "> How can I help you?" : "> 有什麼事嗎？";
     document.getElementById("reporttext001").classList.remove("report-topic-selected");
-    document.getElementById("reporttext002").textContent = "> 請選擇類型：";
+    document.getElementById("reporttext002").textContent = window.currentLang === 'en' ? "> Please select a topic:" : "> 請選擇類型：";
     document.getElementById("report-message").value = "";
 }
 
@@ -117,7 +125,7 @@ async function submitReport() {
 
     // Disable button while submitting
     const sendBtn = document.querySelector(".report-send-btn");
-    if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = "送出中…"; }
+    if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = window.currentLang === 'en' ? "Sending..." : "送出中…"; }
 
     const record = {
         type:    currentTopic || "未分類",
@@ -148,15 +156,15 @@ async function submitReport() {
         // ── Success ──
         document.getElementById("report-topic-buttons").style.display = "none";
         document.getElementById("report-input-area").style.display = "none";
-        document.getElementById("reporttext001").textContent = "> 謝謝！w(ﾟДﾟ)w";
+        document.getElementById("reporttext001").textContent = window.currentLang === 'en' ? "> Thank you! w(ﾟДﾟ)w" : "> 謝謝！w(ﾟДﾟ)w";
         document.getElementById("reporttext001").classList.add("report-topic-selected");
-        document.getElementById("reporttext002").textContent = "> 收到！";
+        document.getElementById("reporttext002").textContent = window.currentLang === 'en' ? "> Received!" : "> 收到！";
         setTimeout(resetReport, 4000);
 
     } catch (err) {
         console.error("[report] Failed to submit:", err);
-        document.getElementById("reporttext002").textContent = "> 提交失敗，請稍後再試下 w(ﾟДﾟ)w";
-        if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = "送出"; }
+        document.getElementById("reporttext002").textContent = window.currentLang === 'en' ? "> Submission failed, please try again later w(ﾟДﾟ)w" : "> 提交失敗，請稍後再試下 w(ﾟДﾟ)w";
+        if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = window.currentLang === 'en' ? "Send " : "送出"; }
     }
 }
 
