@@ -96,10 +96,7 @@ Click the report button to open the submission window. Select your issue categor
   <img src="report.png" alt="Reporting Window Interface" width="100%" />
 </div>
 
-## Deployment
 
-The application is static and can be hosted via GitHub Pages, Cloudflare Pages, or Vercel. 
-Ensure `data.json` is located in the root directory relative to `index.html`. For Cloudflare deployments, use the provided `wrangler.jsonc` configuration.
 
 ## Data Sources and References
 
