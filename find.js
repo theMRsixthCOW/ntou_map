@@ -118,7 +118,10 @@ async function findSimilarBuilding(query) {
     let profMaxScore = -1;
 
     for (const p of professors) {
-        const score = calculateSimilarity(p.name, query);
+        let score = calculateSimilarity(p.name, query);
+        if (p.name_EN) {
+            score = Math.max(score, calculateSimilarity(p.name_EN, query));
+        }
         if (score > profMaxScore && score > 0) {
             profMaxScore = score;
             bestProfMatch = p;
@@ -393,7 +396,8 @@ async function findBuilding(updateUrl = true) {
                 if (m.professorMatched) {
                     const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
                     const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
-                    popupHtml += `<br><br><strong>${profLabel}: ${m.professorMatched.name}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
+                    const dispName = window.currentLang === 'en' && m.professorMatched.name_EN ? m.professorMatched.name_EN : m.professorMatched.name;
+                    popupHtml += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
                 }
                 new maplibregl.Popup()
                     .setLngLat([m.lon, m.lat])
@@ -462,7 +466,8 @@ async function findRoute() {
                 if (m.professorMatched) {
                     const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
                     const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
-                    popupHtml += `<br><br><strong>${profLabel}: ${m.professorMatched.name}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
+                    const dispName = window.currentLang === 'en' && m.professorMatched.name_EN ? m.professorMatched.name_EN : m.professorMatched.name;
+                    popupHtml += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
                 }
                 new maplibregl.Popup()
                     .setLngLat([m.lon, m.lat])
@@ -487,7 +492,8 @@ async function findRoute() {
                             if (m.professorMatched) {
                                 const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
                                 const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
-                                popupHtml += `<br><br><strong>${profLabel}: ${m.professorMatched.name}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
+                                const dispName = window.currentLang === 'en' && m.professorMatched.name_EN ? m.professorMatched.name_EN : m.professorMatched.name;
+                                popupHtml += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
                             }
                             new maplibregl.Popup()
                                 .setLngLat([m.lon, m.lat])
@@ -814,5 +820,161 @@ async function getRoute(points) {
         }
     } catch (e) {
         console.error("Failed to fetch route", e);
+    }
+}
+
+// --- Google Maps Style Search Suggestion ---
+
+async function getTopSuggestions(query) {
+    const buildings = await getBuildings();
+    const professors = await getProfessors();
+    let results = [];
+
+    const qs = query.toLowerCase().trim();
+
+    // Search for professors
+    for (const p of professors) {
+        let score = calculateSimilarity(p.name, qs);
+        if (p.name_EN) {
+            score = Math.max(score, calculateSimilarity(p.name_EN, qs));
+        }
+        if (score > 0) {
+            let bldgCode = (p.office || '').split(' ')[0];
+            let matchedBldg = null;
+            if (bldgCode) {
+                matchedBldg = buildings.find(b => b.code_id && b.code_id.toLowerCase() === bldgCode.toLowerCase());
+                if (!matchedBldg) {
+                    matchedBldg = buildings.find(b => calculateSimilarity(b.name, bldgCode) >= 80 || calculateSimilarity(b.name_ch, bldgCode) >= 80);
+                }
+            }
+            if (matchedBldg) {
+                const dispName = window.currentLang === 'en' && p.name_EN ? p.name_EN : p.name;
+                results.push({
+                    score: score + 10,
+                    type: 'professor',
+                    professorMatched: p,
+                    label: dispName + ' (' + (window.currentLang === 'en' ? matchedBldg.name : matchedBldg.name_ch) + ')',
+                    number: matchedBldg.number,
+                    code_id: matchedBldg.code_id,
+                    targetName: dispName
+                });
+            }
+        }
+    }
+
+    // Search for buildings
+    for (const b of buildings) {
+        const score = Math.max(
+            calculateSimilarity(b.number, qs),
+            calculateSimilarity(b.name, qs),
+            calculateSimilarity(b.name_ch, qs),
+            calculateSimilarity(b.code_id, qs),
+            calculateSimilarity(b.location_code, qs)
+        );
+
+        if (score > 0) {
+            results.push({
+                score: score,
+                type: 'building',
+                label: window.currentLang === 'en' ? b.name : b.name_ch,
+                number: b.number,
+                code_id: b.code_id,
+                targetName: window.currentLang === 'en' ? b.name : b.name_ch
+            });
+        }
+    }
+
+    // sort descending by score
+    results.sort((a, b) => b.score - a.score);
+
+    // limit to top 5 unique elements
+    const unique = [];
+    const seen = new Set();
+    for (let r of results) {
+        const key = r.type === 'professor' ? `prof_${r.professorMatched.name}` : `bldg_${r.number}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+            unique.push(r);
+            if (unique.length >= 5) break; 
+        }
+    }
+
+    return unique;
+}
+
+async function handleSearchInput(inputId) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+    const query = inputEl.value.trim();
+    const suggestionsEl = document.getElementById(inputId + '-suggestions');
+    if (!suggestionsEl) return;
+    
+    if (!query) {
+        hideSuggestions(inputId);
+        return;
+    }
+
+    const matches = await getTopSuggestions(query);
+    if (matches.length === 0) {
+        hideSuggestions(inputId);
+        return;
+    }
+
+    suggestionsEl.innerHTML = '';
+    matches.forEach(match => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        
+        const icon = document.createElement('img');
+        icon.src = match.type === 'professor' ? 
+            'https://cdn-icons-png.flaticon.com/128/1946/1946429.png' :
+            'https://cdn-icons-png.flaticon.com/128/2838/2838912.png';
+        icon.className = 'suggestion-icon';
+
+        const textContainer = document.createElement('div');
+        textContainer.className = 'suggestion-text';
+        
+        const mainText = document.createElement('div');
+        mainText.className = 'suggestion-main-text';
+        mainText.innerText = match.label;
+        
+        const subText = document.createElement('div');
+        subText.className = 'suggestion-sub-text';
+        if (match.type === 'professor') {
+            subText.innerText = window.currentLang === 'en' ? `Office: ${match.professorMatched.office}` : `辦公室：${match.professorMatched.office}`;
+        } else {
+            subText.innerText = match.number ? `No. ${match.number} - ${match.code_id || ''}` : `${match.code_id || ''}`;
+        }
+
+        textContainer.appendChild(mainText);
+        textContainer.appendChild(subText);
+        
+        item.appendChild(icon);
+        item.appendChild(textContainer);
+
+        item.onmousedown = (e) => {
+            e.preventDefault();
+            inputEl.value = match.targetName;
+            hideSuggestions(inputId);
+            
+            inputEl.dispatchEvent(new Event('input'));
+
+            if (inputId === 'fname') {
+                findBuilding();
+            } else if (inputId === 'destination') {
+                findRoute();
+            }
+        };
+
+        suggestionsEl.appendChild(item);
+    });
+
+    suggestionsEl.style.display = 'flex';
+}
+
+function hideSuggestions(inputId) {
+    const suggestionsEl = document.getElementById(inputId + '-suggestions');
+    if (suggestionsEl) {
+        suggestionsEl.style.display = 'none';
     }
 }

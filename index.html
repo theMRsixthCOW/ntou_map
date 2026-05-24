@@ -56,13 +56,15 @@
       <span data-i18n="ADM or 行政大樓 or 1（地圖上的編號）"> ADM or 行政大樓 or 1（地圖上的編號） </span>
     </div>
   </div>
-  <input type="search" id="fname" onkeypress="if(event.key === 'Enter') { findBuilding(); }">
+  <input type="search" id="fname" autocomplete="off" oninput="handleSearchInput('fname')" onfocus="handleSearchInput('fname')" onblur="setTimeout(() => hideSuggestions('fname'), 200)" onkeypress="if(event.key === 'Enter') { findBuilding(); hideSuggestions('fname'); }">
   <button class="locate-btn" onclick="locateUser()" title="定位我的位置"><img src="icons/target.png" alt="locate me"></button>
   <button onclick="findBuilding()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
+  <div id="fname-suggestions" class="suggestions-dropdown"></div>
 </div>
 <div class="search-container inputbar2">
-  <input type="search" id="destination" placeholder="目的地（例如：圖書館或教授名字）" data-i18n="目的地（例如：圖書館或教授名字）" onkeypress="if(event.key === 'Enter') { findRoute(); }">
+  <input type="search" id="destination" autocomplete="off" placeholder="目的地（例如：圖書館或教授名字）" data-i18n="目的地（例如：圖書館或教授名字）" oninput="handleSearchInput('destination')" onfocus="handleSearchInput('destination')" onblur="setTimeout(() => hideSuggestions('destination'), 200)" onkeypress="if(event.key === 'Enter') { findRoute(); hideSuggestions('destination'); }">
   <button onclick="findRoute()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
+  <div id="destination-suggestions" class="suggestions-dropdown"></div>
 </div>
 
 <input type="hidden" id="lat-input">

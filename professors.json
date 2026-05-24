@@ -1,410 +1,507 @@
 [
   {
     "name": "馬尚彬",
-    "office": "ECG 804"
+    "office": "ECG 804",
+    "name_EN": "Ma Shang Bin"
   },
   {
     "name": "張欽圳",
-    "office": "INS 410"
+    "office": "INS 410",
+    "name_EN": "Zhang Qin Zhen"
   },
   {
     "name": "丁培毅",
-    "office": "INS 512"
+    "office": "INS 512",
+    "name_EN": "Ding Pei Yi"
   },
   {
     "name": "林清池",
-    "office": "INS 612"
+    "office": "INS 612",
+    "name_EN": "Lin Qing Chi"
   },
   {
     "name": "林韓禹",
-    "office": "INS 611"
+    "office": "INS 611",
+    "name_EN": "Lin Han Yu"
   },
   {
     "name": "翁世光",
-    "office": "INS 510"
+    "office": "INS 510",
+    "name_EN": "Weng Shi Guang"
   },
   {
     "name": "張光遠",
-    "office": "INS 514"
+    "office": "INS 514",
+    "name_EN": "Zhang Guang Yuan"
   },
   {
     "name": "張雅惠",
-    "office": "INS 616"
+    "office": "INS 616",
+    "name_EN": "Zhang Ya Hui"
   },
   {
     "name": "曾志成",
-    "office": "INS 508"
+    "office": "INS 508",
+    "name_EN": "Ceng Zhi Cheng"
   },
   {
     "name": "趙志民",
-    "office": "INS 614"
+    "office": "INS 614",
+    "name_EN": "Zhao Zhi Min"
   },
   {
     "name": "鄭建富",
-    "office": "ECG 803"
+    "office": "ECG 803",
+    "name_EN": "Zheng Jian Fu"
   },
   {
     "name": "鄭錫齊",
-    "office": "INS 610"
+    "office": "INS 610",
+    "name_EN": "Zheng Xi Qi"
   },
   {
     "name": "嚴茂旭",
-    "office": "INS 618"
+    "office": "INS 618",
+    "name_EN": "Yan Mao Xu"
   },
   {
     "name": "葉春超",
-    "office": "INS 412"
+    "office": "INS 412",
+    "name_EN": "Ye Chun Chao"
   },
   {
     "name": "許為元",
-    "office": "EE2 634"
+    "office": "EE2 634",
+    "name_EN": "Xu Wei Yuan"
   },
   {
     "name": "辛華昀",
-    "office": "ECG 712"
+    "office": "ECG 712",
+    "name_EN": "Xin Hua Yun"
   },
   {
     "name": "程華淮",
-    "office": "INS 408"
+    "office": "INS 408",
+    "name_EN": "Cheng Hua Huai"
   },
   {
     "name": "許玉平",
-    "office": "INS 516"
+    "office": "INS 516",
+    "name_EN": "Xu Yu Ping"
   },
   {
     "name": "林致宇",
-    "office": "ECG 805"
+    "office": "ECG 805",
+    "name_EN": "Lin Zhi Yu"
   },
   {
     "name": "蔡宇軒",
-    "office": "INS 509"
+    "office": "INS 509",
+    "name_EN": "Cai Yu Xuan"
   },
   {
     "name": "蔡東佐",
-    "office": "INS 507"
+    "office": "INS 507",
+    "name_EN": "Cai Dong Zuo"
   },
   {
     "name": "阮議聰",
-    "office": "INS 608"
+    "office": "INS 608",
+    "name_EN": "Ruan Yi Cong"
   },
   {
     "name": "林川傑",
-    "office": "INS 609"
+    "office": "INS 609",
+    "name_EN": "Lin Chuan Jie"
   },
   {
     "name": "林莊傑",
-    "office": "ECG 801"
+    "office": "ECG 801",
+    "name_EN": "Lin Zhuang Jie"
   },
   {
     "name": "馬永昌",
-    "office": "INS 607"
+    "office": "INS 607",
+    "name_EN": "Ma Yong Chang"
   },
   {
     "name": "楊名全",
-    "office": "ECG 702"
+    "office": "ECG 702",
+    "name_EN": "Yang Ming Quan"
   },
   {
     "name": "顏家珩",
-    "office": "ECG 703"
+    "office": "ECG 703",
+    "name_EN": "Yan Jia Hang"
   },
   {
     "name": "溫博浚",
-    "office": "MEA 301"
+    "office": "MEA 301",
+    "name_EN": "Wen Bo Jun"
   },
   {
     "name": "林益煌",
-    "office": "MEA 205"
+    "office": "MEA 205",
+    "name_EN": "Lin Yi Huang"
   },
   {
     "name": "林鎮洲",
-    "office": "MEB 227-1"
+    "office": "MEB 227-1",
+    "name_EN": "Lin Zhen Zhou"
   },
   {
     "name": "傅群超",
-    "office": "MEB 226-1"
+    "office": "MEB 226-1",
+    "name_EN": "Fu Qun Chao"
   },
   {
     "name": "閻順昌",
-    "office": "MEA 315"
+    "office": "MEA 315",
+    "name_EN": "Yan Shun Chang"
   },
   {
     "name": "任貽明",
-    "office": "MEB 325-2"
+    "office": "MEB 325-2",
+    "name_EN": "Ren Yi Ming"
   },
   {
     "name": "周昭昌",
-    "office": "MEA 319"
+    "office": "MEA 319",
+    "name_EN": "Zhou Zhao Chang"
   },
   {
     "name": "黃士豪",
-    "office": "MEA 207"
+    "office": "MEA 207",
+    "name_EN": "Huang Shi Hao"
   },
   {
     "name": "劉倫偉",
-    "office": "MEB 224"
+    "office": "MEB 224",
+    "name_EN": "Liu Lun Wei"
   },
   {
     "name": "吳志偉",
-    "office": "MEB 225-2"
+    "office": "MEB 225-2",
+    "name_EN": "Wu Zhi Wei"
   },
   {
     "name": "張文桐",
-    "office": "MEB 222-2"
+    "office": "MEB 222-2",
+    "name_EN": "Zhang Wen Tong"
   },
   {
     "name": "林育志",
-    "office": "MEA 320-2"
+    "office": "MEA 320-2",
+    "name_EN": "Lin Yu Zhi"
   },
   {
     "name": "吳俊毅",
-    "office": "MEA 208"
+    "office": "MEA 208",
+    "name_EN": "Wu Jun Yi"
   },
   {
     "name": "莊程媐",
-    "office": "MEA 311"
+    "office": "MEA 311",
+    "name_EN": "Zhuang Cheng Yi"
   },
   {
     "name": "何靖國",
-    "office": "MEA 409"
+    "office": "MEA 409",
+    "name_EN": "He Jing Guo"
   },
   {
     "name": "陳聖化",
-    "office": "MEA 318"
+    "office": "MEA 318",
+    "name_EN": "Chen Sheng Hua"
   },
   {
     "name": "郭兆渝",
-    "office": "MEA 320-1"
+    "office": "MEA 320-1",
+    "name_EN": "Guo Zhao Yu"
   },
   {
     "name": "施佑羲",
-    "office": "MEA 320-4"
+    "office": "MEA 320-4",
+    "name_EN": "Shi You Xi"
   },
-
-
-
   {
     "name": "李明安",
-    "office": "EXT 5032"
+    "office": "FSH 5032",
+    "name_EN": "Li Ming An"
   },
   {
     "name": "廖正信",
-    "office": "EXT 5050"
+    "office": "FSH 5050",
+    "name_EN": "Liao Zheng Xin"
   },
   {
     "name": "鄭學淵",
-    "office": "EXT 5049"
+    "office": "FSH 5049",
+    "name_EN": "Zheng Xue Yuan"
   },
   {
     "name": "呂學榮",
-    "office": "EXT 5033"
+    "office": "FSH 5033",
+    "name_EN": "Lv Xue Rong"
   },
   {
     "name": "王勝平",
-    "office": "EXT 5028"
+    "office": "FSH 5028",
+    "name_EN": "Wang Sheng Ping"
   },
   {
     "name": "藍國瑋",
-    "office": "EXT 5027"
+    "office": "FSH 5027",
+    "name_EN": "Lan Guo Wei"
   },
   {
     "name": "蘇楠傑",
-    "office": "EXT 5046"
+    "office": "FSH 5046",
+    "name_EN": "Su Nan Jie"
   },
   {
     "name": "曾煥昇",
-    "office": "EXT 5024"
+    "office": "FSH 5024",
+    "name_EN": "Ceng Huan Sheng"
   },
   {
     "name": "魯謹萍",
-    "office": "EXT 5035"
+    "office": "FSH 5035",
+    "name_EN": "Lu Jin Ping"
   },
   {
     "name": "王怡甄",
-    "office": "EXT 5022"
+    "office": "FSH 5022",
+    "name_EN": "Wang Yi Zhen"
   },
   {
     "name": "李宏泰",
-    "office": "EXT 5016"
+    "office": "FSH 5016",
+    "name_EN": "Li Hong Tai"
   },
   {
     "name": "李國添",
-    "office": "EXT 5031"
+    "office": "FSH 5031",
+    "name_EN": "Li Guo Tian"
   },
   {
     "name": "歐慶賢",
-    "office": "EXT 5025"
+    "office": "FSH 5025",
+    "name_EN": "Ou Qing Xian"
   },
   {
     "name": "莊守正",
-    "office": "EXT 5039"
+    "office": "FSH 5039",
+    "name_EN": "Zhuang Shou Zheng"
   },
-
   {
     "name": "陳泰源",
-    "office": "FS 218"
+    "office": "FS 218",
+    "name_EN": "Chen Tai Yuan"
   },
   {
     "name": "方銘志",
-    "office": "MA 211B"
+    "office": "MA 211B",
+    "name_EN": "Fang Ming Zhi"
   },
   {
     "name": "孫寶年",
-    "office": "FS 308"
+    "office": "FS 308",
+    "name_EN": "Sun Bao Nian"
   },
   {
     "name": "江孟燦",
-    "office": "FE 219"
+    "office": "FE 219",
+    "name_EN": "Jiang Meng Can"
   },
   {
     "name": "龔瑞林",
-    "office": "FS 311"
+    "office": "FS 311",
+    "name_EN": "Gong Rui Lin"
   },
   {
     "name": "方翠筠",
-    "office": "FE 315B"
+    "office": "FE 315B",
+    "name_EN": "Fang Cui Yun"
   },
   {
     "name": "吳彰哲",
-    "office": "FE 315A"
+    "office": "FE 315A",
+    "name_EN": "Wu Zhang Zhe"
   },
   {
     "name": "蔡敏郎",
-    "office": "FS 108"
+    "office": "FS 108",
+    "name_EN": "Cai Min Lang"
   },
   {
     "name": "黃意真",
-    "office": "FS 328"
+    "office": "FS 328",
+    "name_EN": "Huang Yi Zhen"
   },
   {
     "name": "宋文杰",
-    "office": "MA 208"
+    "office": "MA 208",
+    "name_EN": "Song Wen Jie"
   },
   {
     "name": "張祐維",
-    "office": "MA 109"
+    "office": "MA 109",
+    "name_EN": "Zhang You Wei"
   },
   {
     "name": "凌明沛",
-    "office": "FS 222"
+    "office": "FS 222",
+    "name_EN": "Ling Ming Pei"
   },
   {
     "name": "蕭心怡",
-    "office": "FE 211"
+    "office": "FE 211",
+    "name_EN": "Xiao Xin Yi"
   },
   {
     "name": "林泓廷",
-    "office": "FS 323"
+    "office": "FS 323",
+    "name_EN": "Lin Hong Ting"
   },
   {
     "name": "黃崇雄",
-    "office": "FS 216"
+    "office": "FS 216",
+    "name_EN": "Huang Chong Xiong"
   },
   {
     "name": "廖若川",
-    "office": "MA 308"
+    "office": "MA 308",
+    "name_EN": "Liao Ruo Chuan"
   },
   {
     "name": "張君如",
-    "office": "FS 110"
+    "office": "FS 110",
+    "name_EN": "Zhang Jun Ru"
   },
   {
     "name": "陳冠文",
-    "office": "FS 107"
+    "office": "FS 107",
+    "name_EN": "Chen Guan Wen"
   },
   {
     "name": "蔡博崴",
-    "office": "FS 111"
+    "office": "FS 111",
+    "name_EN": "Cai Bo Wai"
   },
   {
     "name": "陳建利",
-    "office": "FE 315C"
+    "office": "FE 315C",
+    "name_EN": "Chen Jian Li"
   },
   {
     "name": "劉修銘",
-    "office": "FS 109"
+    "office": "FS 109",
+    "name_EN": "Liu Xiu Ming"
   },
   {
     "name": "陳詠宗",
-    "office": "FS 326"
+    "office": "FS 326",
+    "name_EN": "Chen Yong Zong"
   },
   {
     "name": "王上達",
-    "office": "FE 212"
+    "office": "FE 212",
+    "name_EN": "Wang Shang Da"
   },
   {
     "name": "吳俊逸",
-    "office": "MA 311A"
+    "office": "MA 311A",
+    "name_EN": "Wu Jun Yi"
   },
   {
     "name": "林家媛",
-    "office": "MA 211A"
+    "office": "MA 211A",
+    "name_EN": "Lin Jia Yuan"
   },
   {
     "name": "吳奕賢",
-    "office": "FS 217"
+    "office": "FS 217",
+    "name_EN": "Wu Yi Xian"
   },
   {
     "name": "楊明峯",
-    "office": "TEC 721"
+    "office": "TEC 721",
+    "name_EN": "Yang Ming Feng"
   },
   {
     "name": "游明敏",
-    "office": "TEC 727"
+    "office": "TEC 727",
+    "name_EN": "You Ming Min"
   },
   {
     "name": "高聖龍",
-    "office": "TEC 712"
+    "office": "TEC 712",
+    "name_EN": "Gao Sheng Long"
   },
   {
     "name": "桑國忠",
-    "office": "TEC 717"
+    "office": "TEC 717",
+    "name_EN": "Sang Guo Zhong"
   },
   {
     "name": "張玉君",
-    "office": "TEC 724"
+    "office": "TEC 724",
+    "name_EN": "Zhang Yu Jun"
   },
   {
     "name": "林振榮",
-    "office": "TEC 720"
+    "office": "TEC 720",
+    "name_EN": "Lin Zhen Rong"
   },
   {
     "name": "湯慶輝",
-    "office": "TEC 719"
+    "office": "TEC 719",
+    "name_EN": "Tang Qing Hui"
   },
   {
     "name": "杜孟儒",
-    "office": "TEC 726"
+    "office": "TEC 726",
+    "name_EN": "Du Meng Ru"
   },
   {
     "name": "丁士展",
-    "office": "TEC 729"
+    "office": "TEC 729",
+    "name_EN": "Ding Shi Zhan"
   },
   {
     "name": "吳繼虹",
-    "office": "TEC 725"
+    "office": "TEC 725",
+    "name_EN": "Wu Ji Hong"
   },
   {
     "name": "蘇健民",
-    "office": "TEC 707"
+    "office": "TEC 707",
+    "name_EN": "Su Jian Min"
   },
   {
     "name": "鍾武勳",
-    "office": "TEC 715"
+    "office": "TEC 715",
+    "name_EN": "Zhong Wu Xun"
   },
   {
     "name": "黃聖騰",
-    "office": "TEC 723"
+    "office": "TEC 723",
+    "name_EN": "Huang Sheng Teng"
   },
   {
     "name": "邵泰源",
-    "office": "TEC 728"
+    "office": "TEC 728",
+    "name_EN": "Shao Tai Yuan"
   },
   {
     "name": "黃燦煌",
-    "office": "TEC 718"
+    "office": "TEC 718",
+    "name_EN": "Huang Can Huang"
   },
   {
     "name": "李信德",
-    "office": "TEC 716"
+    "office": "TEC 716",
+    "name_EN": "Li Xin De"
   }
 ]
