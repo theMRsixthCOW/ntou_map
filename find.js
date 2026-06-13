@@ -339,6 +339,34 @@ function highlightBuildingAt(lng, lat, color = '#FFD700') {
     });
 }
 
+function getBuildingPopupHTML(b, contextLabel) {
+    if (b.number === "75" || b.name === "Amung us") {
+        return `<video autoplay playsinline style="width: 100%; height: auto; display: block; border-radius: 4px;">
+                    <source src="icons/miss input.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>`;
+    }
+    
+    if (contextLabel) {
+        let html = `<strong>${contextLabel}</strong><br>${window.currentLang === 'en' ? b.name : b.name_ch}<br>${window.currentLang === 'en' ? b.name_ch : b.name}`;
+        if (b.professorMatched) {
+            const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
+            const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
+            const dispName = window.currentLang === 'en' && b.professorMatched.name_EN ? b.professorMatched.name_EN : b.professorMatched.name;
+            html += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${b.professorMatched.office}`;
+        }
+        return html;
+    } else {
+        const startBtn = window.currentLang === 'en' ? 'Start here' : 'Start(起點)';
+        const goBtn = window.currentLang === 'en' ? 'Go here' : 'Go here(終點)';
+        return `<strong>${window.currentLang === 'en' ? b.name : b.name_ch}</strong><br>` +
+               `${window.currentLang === 'en' ? b.name_ch : b.name}<br>` +
+               `Code: ${b.code_id || 'N/A'}<br>` +
+               `<button onclick="startAtBuilding('${b.number}')">${startBtn}</button> ` +
+               `<button onclick="goToBuilding('${b.number}')">${goBtn}</button>`;
+    }
+}
+
 async function findBuilding(updateUrl = true) {
 
     clearMapRoute();
@@ -390,20 +418,11 @@ async function findBuilding(updateUrl = true) {
             
             highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
             
-            matches.forEach(m => {
-                const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
-                let popupHtml = `<strong>${startLabel}</strong><br>${window.currentLang === 'en' ? m.name : m.name_ch}<br>${window.currentLang === 'en' ? m.name_ch : m.name}`;
-                if (m.professorMatched) {
-                    const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
-                    const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
-                    const dispName = window.currentLang === 'en' && m.professorMatched.name_EN ? m.professorMatched.name_EN : m.professorMatched.name;
-                    popupHtml += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
-                }
-                new maplibregl.Popup()
-                    .setLngLat([m.lon, m.lat])
-                    .setHTML(popupHtml)
-                    .addTo(map);
-            });
+            const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
+            new maplibregl.Popup()
+                .setLngLat([match.lon, match.lat])
+                .setHTML(getBuildingPopupHTML(match, startLabel))
+                .addTo(map);
         }
     } else {
         alert(window.currentLang === 'en' ? "Start building not found" : "找不到相符的起點建築物 (Start building not found)");
@@ -434,6 +453,10 @@ function clearMapRoute() {
 async function findRoute() {
     clearMapRoute();
 
+    // Close any map pop-out windows (popups) currently open before making new ones
+    const popups = document.querySelectorAll('.maplibregl-popup');
+    popups.forEach(popup => popup.remove());
+
     const destInput = document.getElementById('destination');
     if (!destInput) return;
     const query = destInput.value;
@@ -460,20 +483,12 @@ async function findRoute() {
             clearHighlightedBuildings();
             highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary destination building in Orange
             
-            matches.forEach(m => {
-                const destLabel = window.currentLang === 'en' ? 'Destination' : '目的地 (Destination)';
-                let popupHtml = `<strong>${destLabel}</strong><br>${window.currentLang === 'en' ? m.name : m.name_ch}<br>${window.currentLang === 'en' ? m.name_ch : m.name}`;
-                if (m.professorMatched) {
-                    const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
-                    const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
-                    const dispName = window.currentLang === 'en' && m.professorMatched.name_EN ? m.professorMatched.name_EN : m.professorMatched.name;
-                    popupHtml += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
-                }
-                new maplibregl.Popup()
-                    .setLngLat([m.lon, m.lat])
-                    .setHTML(popupHtml)
-                    .addTo(map);
-            });
+            // Show destination popup for the primary match only
+            const destLabel = window.currentLang === 'en' ? 'Destination' : '目的地 (Destination)';
+            new maplibregl.Popup()
+                .setLngLat([match.lon, match.lat])
+                .setHTML(getBuildingPopupHTML(match, destLabel))
+                .addTo(map);
             
             if (startLat && startLng) {
                 // Show start building popup if fname was filled in
@@ -486,20 +501,11 @@ async function findRoute() {
                         const startMatch = startMatches[0];
                         highlightBuildingAt(startMatch.lon, startMatch.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
                         
-                        startMatches.forEach(m => {
-                            const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
-                            let popupHtml = `<strong>${startLabel}</strong><br>${window.currentLang === 'en' ? m.name : m.name_ch}<br>${window.currentLang === 'en' ? m.name_ch : m.name}`;
-                            if (m.professorMatched) {
-                                const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
-                                const officeLabel = window.currentLang === 'en' ? 'Office' : '辦公室 (Office)';
-                                const dispName = window.currentLang === 'en' && m.professorMatched.name_EN ? m.professorMatched.name_EN : m.professorMatched.name;
-                                popupHtml += `<br><br><strong>${profLabel}: ${dispName}</strong><br>${officeLabel}: ${m.professorMatched.office}`;
-                            }
-                            new maplibregl.Popup()
-                                .setLngLat([m.lon, m.lat])
-                                .setHTML(popupHtml)
-                                .addTo(map);
-                        });
+                        const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
+                        new maplibregl.Popup()
+                            .setLngLat([startMatch.lon, startMatch.lat])
+                            .setHTML(getBuildingPopupHTML(startMatch, startLabel))
+                            .addTo(map);
                     }
                 }
 
@@ -578,63 +584,45 @@ function startAtBuilding(buildingNumber) {
 }
 
 function initBuildingClickHandlers(map) {
-    // Flag: when a 3D building is clicked, skip the generic popup
-    let buildingClicked = false;
-
-    // Generic click — show lat/lng (unless a building was just clicked)
-    map.on('click', (e) => {
-        if (buildingClicked) {
-            buildingClicked = false;
-            return;
-        }
+    // Single click handler for the map to prevent multiple popups
+    map.on('click', async (e) => {
         const { lng, lat } = e.lngLat;
-        console.log(`Location Coordinates: Lng: ${lng}, Lat: ${lat}`);
+        
+        // 1. Check if a 3D building feature was clicked
+        const features = map.queryRenderedFeatures(e.point, { layers: ['3d-buildings'] });
+        
+        if (features.length > 0) {
+            const buildings = await getBuildings();
+            let closest = null;
+            let minDist = Infinity;
 
+            for (const b of buildings) {
+                const dist = Math.sqrt(
+                    Math.pow(b.lat - lat, 2) +
+                    Math.pow(b.lon - lng, 2)
+                );
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = b;
+                }
+            }
+
+            // ~0.00025 degrees ≈ roughly 25 m — match buildings in data.json
+            if (closest && minDist < 0.00025) {
+                new maplibregl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(getBuildingPopupHTML(closest))
+                    .addTo(map);
+                return; // Found a building, stop here
+            }
+        }
+
+        // 2. Fallback: Generic click — show lat/lng
+        console.log(`Location Coordinates: Lng: ${lng}, Lat: ${lat}`);
         new maplibregl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(`Lat: ${lat.toFixed(5)}<br>Lng: ${lng.toFixed(5)}`)
             .addTo(map);
-    });
-
-    // Click on a 3D building → show name / name_ch / code_id from data.json
-    map.on('click', '3d-buildings', async (e) => {
-        buildingClicked = true;
-        const clickedLng = e.lngLat.lng;
-        const clickedLat = e.lngLat.lat;
-
-        const buildings = await getBuildings();
-        let closest = null;
-        let minDist = Infinity;
-
-        for (const b of buildings) {
-            const dist = Math.sqrt(
-                Math.pow(b.lat - clickedLat, 2) +
-                Math.pow(b.lon - clickedLng, 2)
-            );
-            if (dist < minDist) {
-                minDist = dist;
-                closest = b;
-            }
-        }
-
-        // ~0.00025 degrees ≈ roughly 25 m — only match nearby buildings
-        if (closest && minDist < 0.00025) {
-            const startBtn = window.currentLang === 'en' ? 'Start here' : '從這裡開始';
-            const goBtn = window.currentLang === 'en' ? 'Go here' : '到這裡去';
-            new maplibregl.Popup()
-                .setLngLat(e.lngLat)
-                .setHTML(
-                    `<strong>${window.currentLang === 'en' ? closest.name : closest.name_ch}</strong><br>` +
-                    `${window.currentLang === 'en' ? closest.name_ch : closest.name}<br>` +
-                    `Code: ${closest.code_id || 'N/A'}<br>` +
-                    `<button onclick="startAtBuilding('${closest.number}')">${startBtn}</button> ` +
-                    `<button onclick="goToBuilding('${closest.number}')">${goBtn}</button>`
-                )
-                .addTo(map);
-        } else {
-            // Clicked a 3D building not in data.json — fall through to generic popup
-            buildingClicked = false;
-        }
     });
 }
 
@@ -736,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const minZoomLimit = isMobile ? 16.0 : 0;
 
     map = new maplibregl.Map({
-        style: `https://tiles.openfreemap.org/styles/bright`,//找中間
+        style: `https://tiles.openfreemap.org/styles/bright`,
         center: [121.77559, 25.14939],               // Fixed: [lng, lat]
         zoom: 17,
         minZoom: minZoomLimit,
