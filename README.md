@@ -6,6 +6,8 @@
 
 The NTOU 3D Campus Navigation System is a web-based mapping application built for the National Taiwan Ocean University. It renders the campus environment in 3D using MapLibre GL JS and OpenFreeMap, based on OpenStreetMap data. The user interface features an industrial design language with monospaced typography and structured layouts.
 
+Use this link to enter the website: **[ntoumap.com](https://ntoumap.com)**
+
 ## Features
 
 - **3D Visualization:** Extruded building geometries for accurate spatial representation.
