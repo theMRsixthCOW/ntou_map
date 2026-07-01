@@ -33,6 +33,16 @@ textarea,
     width: 100%;
     outline: none;
     border-radius: 5px;
+    /* Hide default clear button in various browsers */
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.search-container input::-webkit-search-cancel-button,
+.search-container input::-webkit-search-decoration,
+.search-container input::-webkit-search-results-button,
+.search-container input::-webkit-search-results-decoration {
+    display: none;
 }
 
 .search-container button {
@@ -47,6 +57,15 @@ textarea,
 .search-container button img {
     width: 20px;
     height: 20px;
+}
+
+.clear-btn img {
+    opacity: 0.4;
+    transition: opacity 0.2s;
+}
+
+.clear-btn:hover img {
+    opacity: 0.8;
 }
 
 .inputbar {
@@ -115,7 +134,8 @@ textarea,
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
     margin-top: 1px;
-    overflow: hidden;
+    max-height: 250px;
+    overflow-y: auto;
     z-index: 100;
     display: none;
     flex-direction: column;
@@ -135,7 +155,8 @@ textarea,
     border-bottom: none;
 }
 
-.suggestion-item:hover {
+.suggestion-item:hover,
+.suggestion-item.selected {
     background-color: #f8f9fa;
 }
 

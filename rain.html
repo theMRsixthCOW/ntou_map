@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTOU Rainy Day - Premium Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-top: #0f0c29;
+            --bg-mid: #302b63;
+            --bg-bottom: #24243e;
+            --accent-color: rgba(255, 255, 255, 0.4);
+            --accent-hover: rgba(255, 255, 255, 0.6);
+            --text-color: rgba(255, 255, 255, 0.8);
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, var(--bg-top), var(--bg-mid), var(--bg-bottom));
+        }
+
+        .rain {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .rain.back-row {
+            display: none;
+            z-index: 1;
+            opacity: 0.5;
+            filter: blur(1px);
+        }
+
+        body.back-row-toggle .rain.back-row {
+            display: block;
+        }
+
+        .drop {
+            position: absolute;
+            bottom: 100%;
+            width: 15px;
+            height: 120px;
+            pointer-events: none;
+            animation: drop 0.5s linear infinite;
+        }
+
+        @keyframes drop {
+            0% { transform: translateY(0vh); }
+            75% { transform: translateY(100vh); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .stem {
+            width: 1px;
+            height: 60%;
+            margin-left: 7px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25));
+            animation: stem 0.5s linear infinite;
+        }
+
+        @keyframes stem {
+            0% { opacity: 1; }
+            65% { opacity: 1; }
+            75% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .splat {
+            width: 15px;
+            height: 10px;
+            border-top: 2px dotted rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            opacity: 1;
+            transform: scale(0);
+            animation: splat 0.5s linear infinite;
+            display: none;
+            margin-top: -10px;
+        }
+
+        body.splat-toggle .splat {
+            display: block;
+        }
+
+        @keyframes splat {
+            0% { opacity: 1; transform: scale(0); }
+            80% { opacity: 1; transform: scale(0); }
+            90% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toggle-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            user-select: none;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .toggle-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .toggle-btn span {
+            display: block;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        body.single-toggle .drop {
+            display: none;
+        }
+
+        body.single-toggle .drop:nth-child(10) {
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.4));
+            z-index: 5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="back-row-toggle splat-toggle">
+    <div class="overlay"></div>
+    <div class="rain front-row"></div>
+    <div class="rain back-row"></div>
+
+    <div class="controls">
+        <div class="toggle-btn splat-toggle active" id="splatBtn">
+            <span>Splat</span>
+        </div>
+        <div class="toggle-btn back-row-toggle active" id="backRowBtn">
+            <span>Back<br>Row</span>
+        </div>
+        <div class="toggle-btn single-toggle" id="singleBtn">
+            <span>Single</span>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var makeItRain = function() {
+                // Clear out everything
+                $('.rain').empty();
+
+                var increment = 0;
+                var drops = "";
+                var backDrops = "";
+
+                while (increment < 100) {
+                    // Random number between 98 and 1
+                    var randoHundo = (Math.floor(Math.random() * (98 - 1 + 1) + 1));
+                    // Random number between 5 and 2
+                    var randoFiver = (Math.floor(Math.random() * (5 - 2 + 1) + 2));
+                    
+                    increment += randoFiver;
+
+                    // Add raindrop to front row
+                    drops += '<div class="drop" style="left: ' + increment + '%; bottom: ' + (randoFiver + randoFiver - 1 + 100) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;">' +
+                             '<div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div>' +
+                             '<div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div>' +
+                             '</div>';
+                    
+                    // Add raindrop to back row
+                    backDrops += '<div class="drop" style="right: ' + increment + '%; bottom: ' + (randoFiver + randoFiver - 1 + 100) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;">' +
+                                 '<div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div>' +
+                                 '<div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div>' +
+                                 '</div>';
+                }
+
+                $('.rain.front-row').append(drops);
+                $('.rain.back-row').append(backDrops);
+            };
+
+            // Toggle handlers
+            $('#splatBtn').on('click', function() {
+                $('body').toggleClass('splat-toggle');
+                $(this).toggleClass('active');
+                // Re-rain to ensure correct rendering (though not strictly necessary for simple toggles)
+                // makeItRain(); 
+            });
+
+            $('#backRowBtn').on('click', function() {
+                $('body').toggleClass('back-row-toggle');
+                $(this).toggleClass('active');
+            });
+
+            $('#singleBtn').on('click', function() {
+                $('body').toggleClass('single-toggle');
+                $(this).toggleClass('active');
+            });
+
+            // Initialize rain
+            makeItRain();
+        });
+    </script>
+</body>
+</html>

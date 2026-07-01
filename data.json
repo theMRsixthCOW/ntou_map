@@ -84,7 +84,7 @@
     "number": "10",
     "name": "Gymnasium",
     "name_ch": "育樂館",
-    "code_id": "GYM",
+    "code_id": "STA",
     "location_code": "E2",
     "lat": 25.1494861,
     "lon": 121.7772294
@@ -114,8 +114,7 @@
     "code_id": "MEW",
     "location_code": "E3",
     "lat": 25.14925,
-    "lon": 121.77801,
-                                    "here":" i fiiish untill here" 
+    "lon": 121.77801
   },
   {
     "number": "14",
@@ -654,7 +653,7 @@
   {
     "number  ":"74",
     "name_id":"GAO",
-    "name  ":"General Affairs Office",
+    "name":"General Affairs Office",
     "name_ch":"總務處/行政大樓3樓309室",
     "lat": 25.14981,
     "lon": 121.77898

@@ -163,7 +163,7 @@ async function submitReport() {
 
     } catch (err) {
         console.error("[report] Failed to submit:", err);
-        document.getElementById("reporttext002").textContent = window.currentLang === 'en' ? "> Submission failed, please try again later w(ﾟДﾟ)w" : "> 提交失敗，請稍後再試下 w(ﾟДﾟ)w";
+        document.getElementById("reporttext002").textContent = window.currentLang === 'en' ? "> Submission failed, please try again later w(ﾟДﾟ)w" : "> 提交失敗，請寄信email 到[ funggi@proton.me ] 教作者重啟系統 w(ﾟДﾟ)w  ";
         if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = window.currentLang === 'en' ? "Send " : "送出"; }
     }
 }

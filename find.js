@@ -1,5 +1,7 @@
 let buildingsData = null;
 let professorsData = null;
+let currentSelectedIndex = -1;
+let currentSuggestions = [];
 
 async function getBuildings() {
     if (!buildingsData) {
@@ -628,27 +630,112 @@ function initBuildingClickHandlers(map) {
 
 // ── Smooth Chyron Placeholder Visibility ──
 document.addEventListener('DOMContentLoaded', () => {
-    const fnameInput = document.getElementById('fname');
-    const placeholderWrapper = document.getElementById('fname-placeholder-wrapper');
-    
-    if (fnameInput && placeholderWrapper) {
-        // Toggle visibility based on input content
-        const togglePlaceholder = () => {
-            if (fnameInput.value === '') {
+    const inputs = ['fname', 'destination'];
+    inputs.forEach(id => {
+        const inputEl = document.getElementById(id);
+        if (inputEl) {
+            inputEl.addEventListener('input', () => updateInputUI(id));
+            inputEl.addEventListener('keydown', (e) => handleKeyDown(e, id));
+            updateInputUI(id);
+        }
+    });
+});
+
+function handleKeyDown(e, inputId) {
+    const suggestionsEl = document.getElementById(inputId + '-suggestions');
+    if (!suggestionsEl || suggestionsEl.style.display === 'none') {
+        if (e.key === 'Enter') {
+            if (inputId === 'fname') findBuilding();
+            else if (inputId === 'destination') findRoute();
+        }
+        return;
+    }
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        currentSelectedIndex = (currentSelectedIndex + 1) % currentSuggestions.length;
+        updateSuggestionHighlight(inputId);
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        currentSelectedIndex = (currentSelectedIndex - 1 + currentSuggestions.length) % currentSuggestions.length;
+        updateSuggestionHighlight(inputId);
+    } else if (e.key === 'Enter') {
+        if (currentSelectedIndex >= 0 && currentSelectedIndex < currentSuggestions.length) {
+            e.preventDefault();
+            selectSuggestion(currentSuggestions[currentSelectedIndex], inputId);
+        } else {
+            // Default enter behavior: find building/route
+            if (inputId === 'fname') findBuilding();
+            else if (inputId === 'destination') findRoute();
+        }
+    } else if (e.key === 'Escape') {
+        hideSuggestions(inputId);
+    }
+}
+
+function updateSuggestionHighlight(inputId) {
+    const suggestionsEl = document.getElementById(inputId + '-suggestions');
+    if (!suggestionsEl) return;
+    const items = suggestionsEl.querySelectorAll('.suggestion-item');
+    items.forEach((item, index) => {
+        if (index === currentSelectedIndex) {
+            item.classList.add('selected');
+            item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+            item.classList.remove('selected');
+        }
+    });
+}
+
+function selectSuggestion(match, inputId) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+    inputEl.value = match.targetName;
+    hideSuggestions(inputId);
+    inputEl.dispatchEvent(new Event('input'));
+
+    if (inputId === 'fname') {
+        findBuilding();
+    } else if (inputId === 'destination') {
+        findRoute();
+    }
+}
+
+function updateInputUI(inputId) {
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+
+    // 1. Toggle Clear Button
+    const clearBtn = document.getElementById(inputId + '-clear');
+    if (clearBtn) {
+        clearBtn.style.display = inputEl.value.length > 0 ? 'flex' : 'none';
+    }
+
+    // 2. Toggle Placeholder (Chyron) - specifically for fname
+    if (inputId === 'fname') {
+        const placeholderWrapper = document.getElementById('fname-placeholder-wrapper');
+        if (placeholderWrapper) {
+            if (inputEl.value === '') {
                 placeholderWrapper.style.opacity = '1';
                 placeholderWrapper.style.visibility = 'visible';
             } else {
                 placeholderWrapper.style.opacity = '0';
                 placeholderWrapper.style.visibility = 'hidden';
             }
-        };
-
-        // Listen for typing or value changes
-        fnameInput.addEventListener('input', togglePlaceholder);
-        // Ensure correct state on load
-        togglePlaceholder();
+        }
     }
-});
+}
+
+function clearInput(inputId) {
+    const inputEl = document.getElementById(inputId);
+    if (inputEl) {
+        inputEl.value = '';
+        updateInputUI(inputId);
+        inputEl.dispatchEvent(new Event('input'));
+        inputEl.focus();
+    }
+    hideSuggestions(inputId);
+}
 
 // ── Language Toggle & i18n ──
 window.currentLang = 'zh';
@@ -731,7 +818,8 @@ document.addEventListener('DOMContentLoaded', () => {
         pitch: 45,
         bearing: 45,
         container: 'map',
-        antialias: true
+        antialias: true,
+        maxBounds: [[121.76400, 25.14300], [121.79600, 25.15300]]
     });
 
     map.on('load', () => {
@@ -883,7 +971,6 @@ async function getTopSuggestions(query) {
         if (!seen.has(key)) {
             seen.add(key);
             unique.push(r);
-            if (unique.length >= 5) break; 
         }
     }
 
@@ -899,10 +986,16 @@ async function handleSearchInput(inputId) {
     
     if (!query) {
         hideSuggestions(inputId);
+        updateInputUI(inputId);
         return;
     }
 
+    updateInputUI(inputId);
+
     const matches = await getTopSuggestions(query);
+    currentSuggestions = matches;
+    currentSelectedIndex = -1;
+
     if (matches.length === 0) {
         hideSuggestions(inputId);
         return;
@@ -942,16 +1035,7 @@ async function handleSearchInput(inputId) {
 
         item.onmousedown = (e) => {
             e.preventDefault();
-            inputEl.value = match.targetName;
-            hideSuggestions(inputId);
-            
-            inputEl.dispatchEvent(new Event('input'));
-
-            if (inputId === 'fname') {
-                findBuilding();
-            } else if (inputId === 'destination') {
-                findRoute();
-            }
+            selectSuggestion(match, inputId);
         };
 
         suggestionsEl.appendChild(item);

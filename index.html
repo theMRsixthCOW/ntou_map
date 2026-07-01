@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>NTOU-3D-MAP</title>
-  <meta property="og:description" content="海洋大學的3D地圖啊 w(ﾟДﾟ)w ， 輸入ID或名稱就能找到建築物，還能規劃路線。作者很健忘不記得學務処在哪裏。有comment請用内建的“聯絡我們”匿名投稿（不用害羞，只用了json所以根本看不到是誰發的）。未來會有-逃生路綫-和-增加下雨的功能" />
+  <meta property="og:description" content="2026/6/25 更新 海洋大學的3D地圖啊 w(ﾟДﾟ)w ，作者不想背編號想出來的工具 輸入ID或名稱就能找到建築物，規劃路線,要找教授辦公室也行。有建議請用内建的“聯絡我們”匿名投稿（只用了json所以根本看不到是誰發的）。未來會有-逃生路綫-和-增加下雨的功能" />
   <meta charset='utf-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.19.0/dist/maplibre-gl.css' />
@@ -57,12 +57,14 @@
     </div>
   </div>
   <input type="search" id="fname" autocomplete="off" oninput="handleSearchInput('fname')" onfocus="handleSearchInput('fname')" onblur="setTimeout(() => hideSuggestions('fname'), 200)" onkeypress="if(event.key === 'Enter') { findBuilding(); hideSuggestions('fname'); }">
+  <button id="fname-clear" class="clear-btn" onclick="clearInput('fname')" style="display: none;"><img src="https://cdn-icons-png.flaticon.com/128/1617/1617543.png" alt="clear"></button>
   <button class="locate-btn" onclick="locateUser()" title="定位我的位置"><img src="icons/target.png" alt="locate me"></button>
   <button onclick="findBuilding()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
   <div id="fname-suggestions" class="suggestions-dropdown"></div>
 </div>
 <div class="search-container inputbar2">
   <input type="search" id="destination" autocomplete="off" placeholder="目的地（例如：圖書館或教授名字）" data-i18n="目的地（例如：圖書館或教授名字）" oninput="handleSearchInput('destination')" onfocus="handleSearchInput('destination')" onblur="setTimeout(() => hideSuggestions('destination'), 200)" onkeypress="if(event.key === 'Enter') { findRoute(); hideSuggestions('destination'); }">
+  <button id="destination-clear" class="clear-btn" onclick="clearInput('destination')" style="display: none;"><img src="https://cdn-icons-png.flaticon.com/128/1617/1617543.png" alt="clear"></button>
   <button onclick="findRoute()"><img src="https://icons.veryicon.com/png/o/miscellaneous/effevo/enter-12.png" alt="search"></button>
   <div id="destination-suggestions" class="suggestions-dropdown"></div>
 </div>
@@ -109,5 +111,6 @@
 </div>
 
 <script src="eye_window.js"></script>
+<script src="Weather.js"></script>
 </body>
 </html>
