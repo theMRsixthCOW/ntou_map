@@ -39,7 +39,7 @@
     "number": "5",
     "name": "General Building II",
     "name_ch": "綜合二館",
-    "code_id": "GB2",
+    "code_id": "GH2",
     "location_code": "G4",
     "lat": 25.1505789,
     "lon": 121.774963
@@ -93,7 +93,7 @@
     "number": "11",
     "name": "Merchant Marine Building",
     "name_ch": "商船系館",
-    "code_id": "MMB",
+    "code_id": "NAV",
     "location_code": "E3",
     "lat": 25.1498126,
     "lon": 121.7777605
@@ -102,7 +102,7 @@
     "number": "12",
     "name": "Yen-Ping Technology Building",
     "name_ch": "延平技術大樓",
-    "code_id": "YPT",
+    "code_id": "TEC",
     "location_code": "E2",
     "lat": 25.1493235,
     "lon": 121.7777471
@@ -120,7 +120,7 @@
     "number": "14",
     "name": "Pei-Hua Building",
     "name_ch": "沛華大樓",
-    "code_id": "PHB",
+    "code_id": "IVY",
     "location_code": "E3",
     "lat": 25.14969,
     "lon": 121.77825
@@ -147,7 +147,7 @@
     "number": "17",
     "name": "Maritime & Air Transportation Building",
     "name_ch": "海空大樓",
-    "code_id": "MAT",
+    "code_id": "SAH",
     "location_code": "D2",
     "lat": 25.14950,
     "lon": 121.77889
@@ -201,7 +201,7 @@
     "number": "23",
     "name": "PE Hall",
     "name_ch": "體育館",
-    "code_id": "PEH",
+    "code_id": "GYM",
     "location_code": "D3",
     "lat": 25.1501551,
     "lon": 121.779347
@@ -264,7 +264,7 @@
     "number": "30",
     "name": "First Restaurant",
     "name_ch": "第一餐廳",
-    "code_id": "FR",
+    "code_id": "FRB",
     "location_code": "G2",
     "lat": 25.1489161,
     "lon": 121.775238
@@ -273,7 +273,7 @@
     "number": "31",
     "name": "General Building III",
     "name_ch": "綜合三館",
-    "code_id": "GB3",
+    "code_id": "GH3",
     "location_code": "G2",
     "lat": 25.1494036,
     "lon": 121.7754735
@@ -399,7 +399,7 @@
     "number": "45",
     "name": "General Building I",
     "name_ch": "綜合一館",
-    "code_id": "GB1",
+    "code_id": "GH1",
     "location_code": "H2",
     "lat": 25.1495815,
     "lon": 121.7730675
@@ -408,7 +408,7 @@
     "number": "46",
     "name": "Marine Department Building",
     "name_ch": "海洋系館",
-    "code_id": "MDB",
+    "code_id": "OCE",
     "location_code": "H3",
     "lat": 25.14983,
     "lon": 121.77345
@@ -516,7 +516,7 @@
     "number": "58",
     "name": "River & Harbor Engineering Building I",
     "name_ch": "河工一館",
-    "code_id": "RHE1",
+    "code_id": "HR1",
     "location_code": "B3",
     "lat": 25.15049,
     "lon": 121.78183
@@ -534,7 +534,7 @@
     "number": "60",
     "name": "Naval Architecture Department Building",
     "name_ch": "造船系館",
-    "code_id": "NAD",
+    "code_id": "NVA",
     "location_code": "B3",
     "lat": 25.15027,
     "lon": 121.78151
@@ -543,7 +543,7 @@
     "number": "61",
     "name": "College of Engineering / Third Restaurant",
     "name_ch": "工學院、第三餐廳",
-    "code_id": "COE",
+    "code_id": "CE-",
     "location_code": "C3",
     "lat": 25.15046,
     "lon": 121.78097
@@ -579,7 +579,7 @@
     "number": "65",
     "name": "Aquatic Animal Research Center",
     "name_ch": "水生動物實驗中心",
-    "code_id": "AARC",
+    "code_id": "AAC",
     "location_code": "D4",
     "lat": 25.1510434,
     "lon": 121.7793608
@@ -615,7 +615,7 @@
     "number": "69",
     "name": "Large Cavitation Tunnel",
     "name_ch": "大型空蝕水槽試驗室",
-    "code_id": "LCT",
+    "code_id": "UAH",
     "location_code": "A2",
     "lat": 25.149826,
     "lon": 121.7829222
@@ -624,7 +624,7 @@
     "number": "70",
     "name": "River & Harbor Engineering Building II",
     "name_ch": "河工二館",
-    "code_id": "RHE2",
+    "code_id": "HR2",
     "location_code": "A2",
     "lat": 25.15016,
     "lon": 121.78276
