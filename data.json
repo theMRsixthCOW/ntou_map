@@ -518,8 +518,8 @@
     "name_ch": "河工一館",
     "code_id": "HR1",
     "location_code": "B3",
-    "lat": 25.15049,
-    "lon": 121.78183
+    "lat": 25.15021,
+    "lon": 121.78145
   },
   {
     "number": "59",
@@ -536,17 +536,17 @@
     "name_ch": "造船系館",
     "code_id": "NVA",
     "location_code": "B3",
-    "lat": 25.15027,
-    "lon": 121.78151
+    "lat": 25.15042,
+    "lon": 121.78103
   },
   {
     "number": "61",
     "name": "College of Engineering / Third Restaurant",
     "name_ch": "工學院、第三餐廳",
-    "code_id": "CE-",
+    "code_id": "CE",
     "location_code": "C3",
-    "lat": 25.15046,
-    "lon": 121.78097
+    "lat" : 25.15049,
+    "lon": 121.78081
   },
   {
     "number": "62",
@@ -554,8 +554,8 @@
     "name_ch": "電機一館",
     "code_id": "EE1",
     "location_code": "C4",
-    "lat": 25.1507194,
-    "lon": 121.7806104
+    "lat": 25.15060,
+    "lon": 121.78056
   },
   {
     "number": "63",
