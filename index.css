@@ -195,7 +195,42 @@ textarea,
 }
 
 .maplibregl-popup-content {
-    background: white !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(4px);
+    /* optional: looks premium with a glass/blur effect */
+}
+
+/* Sync the popup tip (triangle arrow) background color and opacity */
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+    border-bottom-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+    border-top-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-top-left .maplibregl-popup-tip {
+    border-bottom-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+    border-bottom-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip {
+    border-top-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+    border-top-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 @media (max-width: 500px) {
