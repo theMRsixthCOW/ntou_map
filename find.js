@@ -341,7 +341,7 @@ function highlightBuildingAt(lng, lat, color = '#FFD700') {
     });
 }
 
-function getBuildingPopupHTML(b, contextLabel) {
+function getBuildingPopupHTML(b, contextLabel, isCompact = true) {
     if (b.number === "75" || b.name === "Amung us") {
         return `<video autoplay playsinline style="width: 100%; height: auto; display: block; border-radius: 4px;">
                     <source src="icons/miss input.mp4" type="video/mp4">
@@ -350,6 +350,18 @@ function getBuildingPopupHTML(b, contextLabel) {
     }
     
     if (contextLabel) {
+        const name = window.currentLang === 'en' ? (b.name || b.name_ch) : (b.name_ch || b.name);
+        const isStart = contextLabel.includes('Start') || contextLabel.includes('起始') || contextLabel.includes('起點');
+        const tagClass = isStart ? 'start-tag' : 'dest-tag';
+        const badgeText = isStart ? (window.currentLang === 'en' ? 'START' : '起點') : (window.currentLang === 'en' ? 'DEST' : '終點');
+        
+        if (isCompact) {
+            return `<div class="compact-popup-inner">
+                <span class="route-badge ${tagClass}">${badgeText}</span>
+                <span class="compact-bldg-name" title="${name}">${name}</span>
+            </div>`;
+        }
+
         let html = `<strong>${contextLabel}</strong><br>${window.currentLang === 'en' ? b.name : b.name_ch}<br>${window.currentLang === 'en' ? b.name_ch : b.name}`;
         if (b.professorMatched) {
             const profLabel = window.currentLang === 'en' ? 'Professor' : '教授 (Professor)';
@@ -370,7 +382,7 @@ function getBuildingPopupHTML(b, contextLabel) {
 }
 
 async function findBuilding(updateUrl = true) {
-
+    hideAllSuggestions();
     clearMapRoute();
     clearHighlightedBuildings();
     // Clear any existing route from the map when searching for a new start building
@@ -420,10 +432,10 @@ async function findBuilding(updateUrl = true) {
             
             highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
             
-            const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
-            new maplibregl.Popup()
+            const startLabel = window.currentLang === 'en' ? 'Start' : '起點';
+            new maplibregl.Popup({ className: 'compact-route-popup' })
                 .setLngLat([match.lon, match.lat])
-                .setHTML(getBuildingPopupHTML(match, startLabel))
+                .setHTML(getBuildingPopupHTML(match, startLabel, true))
                 .addTo(map);
         }
     } else {
@@ -453,6 +465,7 @@ function clearMapRoute() {
 }
 
 async function findRoute() {
+    hideAllSuggestions();
     clearMapRoute();
 
     // Close any map pop-out windows (popups) currently open before making new ones
@@ -486,10 +499,10 @@ async function findRoute() {
             highlightBuildingAt(match.lon, match.lat, '#ffad33ff'); // Highlight only the primary destination building in Orange
             
             // Show destination popup for the primary match only
-            const destLabel = window.currentLang === 'en' ? 'Destination' : '目的地 (Destination)';
-            new maplibregl.Popup()
+            const destLabel = window.currentLang === 'en' ? 'Destination' : '終點';
+            new maplibregl.Popup({ className: 'compact-route-popup' })
                 .setLngLat([match.lon, match.lat])
-                .setHTML(getBuildingPopupHTML(match, destLabel))
+                .setHTML(getBuildingPopupHTML(match, destLabel, true))
                 .addTo(map);
             
             if (startLat && startLng) {
@@ -503,10 +516,10 @@ async function findRoute() {
                         const startMatch = startMatches[0];
                         highlightBuildingAt(startMatch.lon, startMatch.lat, '#ffad33ff'); // Highlight only the primary start building in Orange
                         
-                        const startLabel = window.currentLang === 'en' ? 'Start' : '起始地 (Start)';
-                        new maplibregl.Popup()
+                        const startLabel = window.currentLang === 'en' ? 'Start' : '起點';
+                        new maplibregl.Popup({ className: 'compact-route-popup' })
                             .setLngLat([startMatch.lon, startMatch.lat])
-                            .setHTML(getBuildingPopupHTML(startMatch, startLabel))
+                            .setHTML(getBuildingPopupHTML(startMatch, startLabel, true))
                             .addTo(map);
                     }
                 }
@@ -560,29 +573,36 @@ window.addEventListener('load', () => {
 
 // Helper: fill destination input with the building name when "Go here" is clicked
 function goToBuilding(buildingNumber) {
+    hideAllSuggestions();
+    if (document.activeElement) document.activeElement.blur();
     if (!buildingsData) return;
     const b = buildingsData.find(item => item.number === buildingNumber);
     if (b) {
         const destInput = document.getElementById('destination');
         if (destInput) {
             destInput.value = b.name_ch || b.name;
+            updateInputUI('destination');
             findRoute();
         }
     }
+    hideAllSuggestions();
 }
 
 // Helper: fill start input with the building name when "Start here" is clicked
 function startAtBuilding(buildingNumber) {
+    hideAllSuggestions();
+    if (document.activeElement) document.activeElement.blur();
     if (!buildingsData) return;
     const b = buildingsData.find(item => item.number === buildingNumber);
     if (b) {
         const fnameInput = document.getElementById('fname');
         if (fnameInput) {
             fnameInput.value = b.name_ch || b.name;
-            fnameInput.dispatchEvent(new Event('input')); // Hide chyron
+            updateInputUI('fname');
             findBuilding();
         }
     }
+    hideAllSuggestions();
 }
 
 function initBuildingClickHandlers(map) {
@@ -770,15 +790,23 @@ const i18n = {
     },
     '送出 ': {
         en: 'Send '
+    },
+    '> SYS.SETTINGS': {
+        en: '> SYS.SETTINGS'
+    },
+    '切換語言 (EN)': {
+        en: 'LANG: EN / 中文'
+    },
+    '報錯': {
+        en: 'REPORT ERROR [報錯]'
+    },
+    '深色模式': {
+        en: 'THEME: DARK / LIGHT'
     }
 };
 
 function toggleLanguage() {
     window.currentLang = window.currentLang === 'zh' ? 'en' : 'zh';
-    const langToggleBtn = document.getElementById('lang-toggle');
-    if (langToggleBtn) {
-        langToggleBtn.innerText = window.currentLang === 'zh' ? 'EN' : '中文';
-    }
     updateStaticText();
 }
 
@@ -794,25 +822,131 @@ function updateStaticText() {
         }
     });
     
-    // Also update title attribute for report icon
-    const reportIcon = document.querySelector('.report-window-icon');
-    if (reportIcon) {
-        reportIcon.title = window.currentLang === 'en' ? i18n['聯絡我們'].en : '聯絡我們';
+    const langToggleText = document.getElementById('lang-toggle-text');
+    if (langToggleText) {
+        langToggleText.innerText = window.currentLang === 'en' ? 'LANG: EN / 中文' : '切換語言 (EN)';
     }
+
+    const reportBtnText = document.getElementById('report-btn-text');
+    if (reportBtnText) {
+        reportBtnText.innerText = window.currentLang === 'en' ? 'REPORT ERROR' : '報錯';
+    }
+
+    updateDarkModeUI();
+}
+
+// ── Settings GUI & Dark Mode Controls ──
+window.isDarkMode = false;
+
+function toggleSettingsMenu(e) {
+    if (e) e.stopPropagation();
+    const container = document.getElementById('settings-container');
+    if (container) {
+        container.classList.toggle('open');
+    }
+}
+
+function closeSettingsMenu() {
+    const container = document.getElementById('settings-container');
+    if (container) {
+        container.classList.remove('open');
+    }
+}
+
+function handleLangToggle(e) {
+    if (e) e.stopPropagation();
+    toggleLanguage();
+    closeSettingsMenu();
+}
+
+function handleReportWindowOpen(e) {
+    if (e) e.stopPropagation();
+    openReportWindow();
+    closeSettingsMenu();
+}
+
+function handleDarkModeToggle(e) {
+    if (e) e.stopPropagation();
+    toggleDarkMode();
+    closeSettingsMenu();
+}
+
+function toggleDarkMode() {
+    window.isDarkMode = !window.isDarkMode;
+    if (window.isDarkMode) {
+        document.body.classList.add('dark-mode');
+        if (typeof map !== 'undefined' && map.setStyle) {
+            map.setStyle('https://tiles.openfreemap.org/styles/dark');
+        }
+    } else {
+        document.body.classList.remove('dark-mode');
+        if (typeof map !== 'undefined' && map.setStyle) {
+            map.setStyle('https://tiles.openfreemap.org/styles/bright');
+        }
+    }
+    updateDarkModeUI();
+}
+
+function updateDarkModeUI() {
+    const textEl = document.getElementById('dark-mode-text');
+    if (textEl) {
+        if (window.currentLang === 'en') {
+            textEl.innerText = window.isDarkMode ? 'THEME: LIGHT' : 'THEME: DARK';
+        } else {
+            textEl.innerText = window.isDarkMode ? '淺色模式' : '深色模式';
+        }
+    }
+}
+
+// Dismiss settings table & search suggestions smoothly on click or press (touch) outside
+document.addEventListener('pointerdown', (e) => {
+    const container = document.getElementById('settings-container');
+    if (container && container.classList.contains('open')) {
+        if (!container.contains(e.target)) {
+            closeSettingsMenu();
+        }
+    }
+
+    if (!e.target.closest('.search-container')) {
+        hideAllSuggestions();
+    }
+});
+
+function hideAllSuggestions() {
+    hideSuggestions('fname');
+    hideSuggestions('destination');
 }
 
 // ── Map Initialization & Route ──
 var map;
 
+function ensure3DBuildingsLayer() {
+    if (typeof map === 'undefined') return;
+    if (!map.getLayer('3d-buildings')) {
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'openmaptiles',
+            'source-layer': 'building',
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': window.isDarkMode ? '#4a5568' : '#aaa',
+                'fill-extrusion-height': ['get', 'render_height'],
+                'fill-extrusion-base': ['get', 'render_min_height'],
+                'fill-extrusion-opacity': 0.6
+            }
+        });
+    }
+    initHighlightLayer();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
-    // Zooming out by 30% scale means multiplying by ~0.7. 
-    // Since 2^(-0.5) is approx 0.7, subtracting 0.5 from zoom level (17 -> 16.5) achieves this.
     const minZoomLimit = isMobile ? 16.0 : 0;
 
     map = new maplibregl.Map({
         style: `https://tiles.openfreemap.org/styles/bright`,
-        center: [121.77559, 25.14939],               // Fixed: [lng, lat]
+        center: [121.77559, 25.14939],
         zoom: 17,
         minZoom: minZoomLimit,
         pitch: 45,
@@ -822,27 +956,14 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBounds: [[121.76400, 25.14300], [121.79600, 25.15300]]
     });
 
-    map.on('load', () => {
-        map.addLayer({
-            'id': '3d-buildings',
-            'source': 'openmaptiles', // OpenFreeMap uses 'openmaptiles' as the source ID in their 'bright' style
-            'source-layer': 'building',
-            'type': 'fill-extrusion',
-            'minzoom': 15,
-            'paint': {
-                'fill-extrusion-color': '#aaa',
-                'fill-extrusion-height': ['get', 'render_height'],
-                'fill-extrusion-base': ['get', 'render_min_height'],
-                'fill-extrusion-opacity': 0.6
-            }
-        });
+    map.on('style.load', () => {
+        ensure3DBuildingsLayer();
+    });
 
-        // Pre-load buildings data and set up click handlers
+    map.on('load', () => {
+        ensure3DBuildingsLayer();
         getBuildings();
         initBuildingClickHandlers(map);
-        
-        // Ensure highlight layer gets initialized if it wasn't already
-        initHighlightLayer();
     });
 });
 

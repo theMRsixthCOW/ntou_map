@@ -194,8 +194,76 @@ textarea,
     text-overflow: ellipsis;
 }
 
+/* =============================================
+   Translucent MapLibre Popups & Compact Route Badges
+   ============================================= */
+
 .maplibregl-popup-content {
-    background: white !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+    border-radius: 0 !important;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+    border-top-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+    border-bottom-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Compact Popup for Start & Destination Route Targets */
+.compact-route-popup .maplibregl-popup-content {
+    padding: 4px 8px !important;
+    max-width: 170px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    border-radius: 0 !important;
+}
+
+.compact-popup-inner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.route-badge {
+    padding: 2px 5px;
+    border-radius: 0;
+    font-weight: 700;
+    font-size: 10px;
+    color: #ffffff;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+}
+
+.route-badge.start-tag {
+    background-color: #2e7d32;
+}
+
+.route-badge.dest-tag {
+    background-color: #c62828;
+}
+
+.compact-bldg-name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #202124;
 }
 
 @media (max-width: 500px) {
@@ -204,12 +272,282 @@ textarea,
     }
 
     .maplibregl-popup-content {
-        padding: 10px 15px 5px 10px !important;
+        padding: 8px 12px 4px 8px !important;
         line-height: 1.3 !important;
+    }
+
+    .compact-route-popup .maplibregl-popup-content {
+        padding: 4px 6px !important;
+        max-width: 140px !important;
+        font-size: 10px !important;
     }
 
     .maplibregl-popup-content button {
         margin-top: 3px;
         padding: 4px 8px;
     }
+}
+
+/* =============================================
+   Terminal CLI Settings Action Button & Sliding Card
+   ============================================= */
+
+.settings-container {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: 'Courier New', Consolas, 'Fira Code', Monaco, monospace;
+}
+
+.settings-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #58a6ff;
+    outline: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s, border-color 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.settings-btn:hover {
+    background-color: #161b22;
+    border-color: #58a6ff;
+    color: #79c0ff;
+}
+
+.settings-btn:active {
+    transform: scale(0.94);
+}
+
+.settings-gear-icon {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-container.open .settings-gear-icon {
+    transform: rotate(180deg);
+}
+
+/* Command Terminal Sliding Box */
+.settings-table {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    width: 220px;
+    background: #0d1117;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    border: 1px solid #30363d;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+
+    /* Smooth slide & scale transition */
+    opacity: 0;
+    transform: translateY(16px) scale(0.94);
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.settings-container.open .settings-table {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.settings-header {
+    padding: 8px 12px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8b949e;
+    letter-spacing: 1px;
+    font-family: 'Courier New', Consolas, Monaco, monospace;
+}
+
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    gap: 4px;
+}
+
+.settings-item-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c9d1d9;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    font-family: 'Courier New', Consolas, Monaco, monospace;
+    box-sizing: border-box;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.terminal-prefix {
+    color: #3fb950;
+    font-weight: bold;
+    font-family: 'Courier New', Consolas, Monaco, monospace;
+}
+
+.settings-item-btn:hover {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #ffffff;
+}
+
+.settings-item-btn:hover .terminal-prefix {
+    color: #58a6ff;
+}
+
+.settings-item-btn:active {
+    background-color: #21262d;
+}
+
+/* Mobile Tweak */
+@media (max-width: 600px) {
+    .settings-container {
+        bottom: 24px;
+        right: 14px;
+    }
+
+    .settings-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .settings-table {
+        width: 200px;
+        bottom: 54px;
+    }
+}
+
+/* =============================================
+   Dark Mode Theme Overrides
+   ============================================= */
+
+body.dark-mode {
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+body.dark-mode .search-container {
+    background: #161b22;
+    border: 1px solid #30363d;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    color: #c9d1d9;
+}
+
+body.dark-mode .search-container input {
+    color: #ffffff;
+}
+
+body.dark-mode .placeholder-wrapper {
+    color: #8b949e;
+}
+
+body.dark-mode .suggestions-dropdown {
+    background: #161b22;
+    border: 1px solid #30363d;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .suggestion-item {
+    background: #161b22;
+    border-bottom: 1px solid #21262d;
+}
+
+body.dark-mode .suggestion-item:hover,
+body.dark-mode .suggestion-item.selected {
+    background-color: #21262d;
+}
+
+body.dark-mode .suggestion-main-text {
+    color: #ffffff;
+}
+
+body.dark-mode .suggestion-sub-text {
+    color: #8b949e;
+}
+
+body.dark-mode .maplibregl-popup-content {
+    background: rgba(13, 17, 23, 0.25) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(48, 54, 61, 0.8) !important;
+    color: #c9d1d9 !important;
+    font-family: 'Courier New', Consolas, Monaco, monospace !important;
+}
+
+body.dark-mode .maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+    border-top-color: rgba(13, 17, 23, 0.25) !important;
+}
+
+body.dark-mode .maplibregl-popup-anchor-top .maplibregl-popup-tip {
+    border-bottom-color: rgba(13, 17, 23, 0.25) !important;
+}
+
+body.dark-mode .maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: rgba(13, 17, 23, 0.25) !important;
+}
+
+body.dark-mode .maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: rgba(13, 17, 23, 0.25) !important;
+}
+
+body.dark-mode .settings-btn {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #58a6ff;
+}
+
+body.dark-mode .settings-btn:hover {
+    background: #161b22;
+    border-color: #58a6ff;
+}
+
+body.dark-mode .settings-table {
+    background: #0d1117;
+    border-color: #30363d;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
+}
+
+body.dark-mode .settings-header {
+    background: #161b22;
+    border-bottom-color: #30363d;
+    color: #8b949e;
+}
+
+body.dark-mode .settings-item-btn {
+    color: #c9d1d9;
+}
+
+body.dark-mode .settings-item-btn:hover {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #ffffff;
 }

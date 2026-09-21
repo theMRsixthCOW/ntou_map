@@ -665,5 +665,13 @@
     "name_ch":"作者",
     "lat":25.15087,
     "lon":121.78226
+  },
+  {
+    "number":"76",
+    "name":"Cultural and Creative Design Industry",
+    "name_ch":"文創設計產業",
+    "code_id":"CCDI",
+    "lat":25.14887,
+    "lon":121.77521
   }
 ]
